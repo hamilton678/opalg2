@@ -48,72 +48,59 @@
 
     <!-- =========================================
          PROGRESS TRACKER
-         Each puzzle awards one letter toward ATTACH.
+         Each puzzle awards one letter.
          JavaScript will update the letters as students
          complete each challenge.
     ========================================== -->
 
-    <section class="progress-section" aria-label="Mission progress">
+<section class="progress-container">
+  <div class="progress-heading">
+    <h2>MISSION PROGRESS</h2>
+  </div>
 
-      <div class="progress-heading">
-        <h2>Your Mission Progress</h2>
-        <p>Collect all six letters!</p>
+  <div class="progress-tracker">
+
+    <!-- Puzzle 1 -->
+    <div class="progress-step active" id="progress1">
+      <div class="progress-indicator" id="indicator1">
+        <span class="active-dot"></span>
       </div>
+      <span class="step-letter" id="letter1">1</span>
+    </div>
 
-      <div class="progress-tracker">
+    <!-- Puzzle 2 -->
+    <div class="progress-step" id="progress2">
+      <div class="progress-indicator" id="indicator2"></div>
+      <span class="step-letter" id="letter2">2</span>
+    </div>
 
-        <div class="progress-step active" id="progress1">
-          <span class="progress-number">1</span>
-          <p>Log In</p>
-          <strong class="progress-letter" id="letter1">?</strong>
-        </div>
+    <!-- Puzzle 3 -->
+    <div class="progress-step" id="progress3">
+      <div class="progress-indicator" id="indicator3"></div>
+      <span class="step-letter" id="letter3">3</span>
+    </div>
 
-        <div class="progress-step locked" id="progress2">
-          <span class="progress-number">2</span>
-          <p>Troubleshoot</p>
-          <strong class="progress-letter" id="letter2">?</strong>
-        </div>
+    <!-- Puzzle 4 -->
+    <div class="progress-step" id="progress4">
+      <div class="progress-indicator" id="indicator4"></div>
+      <span class="step-letter" id="letter4">4</span>
+    </div>
 
-        <div class="progress-step locked" id="progress3">
-          <span class="progress-number">3</span>
-          <p>File Locations</p>
-          <strong class="progress-letter" id="letter3">?</strong>
-        </div>
+    <!-- Puzzle 5 -->
+    <div class="progress-step" id="progress5">
+      <div class="progress-indicator" id="indicator5"></div>
+      <span class="step-letter" id="letter5">5</span>
+    </div>
 
-        <div class="progress-step locked" id="progress4">
-          <span class="progress-number">4</span>
-          <p>File Names</p>
-          <strong class="progress-letter" id="letter4">?</strong>
-        </div>
+    <!-- Puzzle 6 -->
+    <div class="progress-step" id="progress6">
+      <div class="progress-indicator" id="indicator6"></div>
+      <span class="step-letter" id="letter6">6</span>
+    </div>
 
-        <div class="progress-step locked" id="progress5">
-          <span class="progress-number">5</span>
-          <p>Search</p>
-          <strong class="progress-letter" id="letter5">?</strong>
-        </div>
+  </div>
+</section>
 
-        <div class="progress-step locked" id="progress6">
-          <span class="progress-number">6</span>
-          <p>Attach</p>
-          <strong class="progress-letter" id="letter6">?</strong>
-        </div>
-
-      </div>
-
-      <!-- The secret word will be revealed as letters are earned. -->
-      <div class="secret-word-area">
-        <p>SECRET WORD</p>
-        <div class="secret-word" id="secretWord">
-          <span>_</span>
-          <span>_</span>
-          <span>_</span>
-          <span>_</span>
-          <span>_</span>
-          <span>_</span>
-        </div>
-      </div>
-
-    </section>
 
 
     <!-- =========================================
