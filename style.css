@@ -1,19 +1,26 @@
 
 /* =========================================================
    MISSION: L.O.S.T.
-   Look. Organize. Search. Turn In.
+   LOOK. ORGANIZE. SEARCH. TURN IN.
 
-   VISUAL THEME
-   Vibrant green background, white puzzle cards, and bold
-   yellow, blue, orange, and lavender accents.
+   Main colors:
+   Green:     #0FAA69
+   Yellow:    #FFCF08
+   Sky Blue:  #48B9F2
+   Orange:    #FF7A1A
+   Lavender:  #E5CAFC
+   White:     #FFFFFF
 
-   This file controls appearance only. It does not change
-   the puzzle answers, interactions, or game logic.
+   Fonts:
+   Main title: Fredoka
+   Headings:   Outfit
+   Body text:  Nunito Sans
    ========================================================= */
 
 
 /* =========================================================
-   1. COLOR PALETTE AND GLOBAL SETTINGS
+   1. COLOR AND DESIGN SETTINGS
+   These variables make it easier to update colors later.
    ========================================================= */
 
 :root {
@@ -27,22 +34,27 @@
   --dark: #24332D;
   --gray: #65736C;
   --light-gray: #F3F6F4;
-  --border: #DCE7E0;
+  --border: #DCE6DF;
 
-  --success: #16834F;
-  --success-light: #E1F5E9;
-  --error: #C74436;
-  --error-light: #FCE9E6;
+  --light-green: #DDF5E9;
+  --light-yellow: #FFF5C9;
+  --light-blue: #DDF2FC;
+  --light-orange: #FFE6D4;
+  --light-lavender: #F1E5FC;
 
-  --shadow: 0 5px 18px rgba(24, 64, 43, 0.13);
-  --shadow-hover: 0 8px 22px rgba(24, 64, 43, 0.19);
+  --correct: #16864F;
+  --incorrect: #C94B32;
 
-  --rounded: 18px;
-  --rounded-small: 12px;
+  --card-radius: 18px;
+  --small-radius: 10px;
+
+  --shadow: 0 5px 18px rgba(20, 65, 43, 0.12);
 }
 
 
-/* Keep sizing predictable across the entire page. */
+/* =========================================================
+   2. BASIC PAGE STYLES
+   ========================================================= */
 
 * {
   box-sizing: border-box;
@@ -54,216 +66,173 @@ html {
 
 body {
   margin: 0;
-  min-height: 100vh;
-  padding: 24px 16px 40px;
-
-  background-color: var(--green);
-  background-image:
-    radial-gradient(
-      circle at 10% 12%,
-      rgba(255, 207, 8, 0.16) 0 5px,
-      transparent 6px
-    ),
-    radial-gradient(
-      circle at 90% 35%,
-      rgba(72, 185, 242, 0.17) 0 7px,
-      transparent 8px
-    ),
-    radial-gradient(
-      circle at 18% 85%,
-      rgba(229, 202, 252, 0.18) 0 6px,
-      transparent 7px
-    );
-
+  padding: 0;
+  background: var(--green);
   color: var(--dark);
-  font-family: 'Nunito', Arial, sans-serif;
+  font-family: 'Nunito Sans', Arial, sans-serif;
+  font-size: 16px;
   line-height: 1.5;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+.hidden {
+  display: none !important;
 }
 
 
 /* =========================================================
-   2. MAIN PAGE LAYOUT
+   3. PAGE HEADER
    ========================================================= */
 
-.container,
-.game-container,
-main {
-  width: 100%;
-  max-width: 1050px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 header {
-  max-width: 1050px;
-  margin: 0 auto 22px;
-  padding: 26px 22px;
-
+  width: 100%;
+  padding: 32px 20px 26px;
   text-align: center;
   color: var(--white);
 }
 
 header h1 {
-  margin: 0 0 8px;
-  font-family: 'Bungee', 'Fredoka', sans-serif;
-  font-size: clamp(2rem, 5vw, 3.3rem);
-  line-height: 1.2;
+  margin: 0 0 4px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1.1;
   letter-spacing: 1px;
-  color: var(--white);
-  text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.15);
 }
 
 header p {
   max-width: 720px;
-  margin: 10px auto 0;
-  font-size: 1.1rem;
+  margin: 8px auto;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+header .subtitle {
+  margin-top: 4px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--white);
+  letter-spacing: 2px;
 }
 
 
 /* =========================================================
-   3. PROGRESS TRACKER
+   4. MAIN PAGE CONTENT
    ========================================================= */
 
-.progress-container,
-.progress-section,
-#progressContainer {
-  max-width: 1050px;
-  margin: 0 auto 24px;
-  padding: 22px;
+main {
+  width: min(100% - 32px, 1050px);
+  margin: 0 auto 40px;
+}
 
+
+/* =========================================================
+   5. PROGRESS TRACKER
+   ========================================================= */
+
+.progress-container {
+  margin: 0 auto 24px;
+  padding: 18px 22px;
   background: var(--white);
-  border: 3px solid rgba(255, 255, 255, 0.65);
-  border-radius: var(--rounded);
+  border-radius: var(--card-radius);
   box-shadow: var(--shadow);
 }
 
 .progress-heading {
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   text-align: center;
 }
 
 .progress-heading h2 {
-  margin: 0 0 4px;
-  font-family: 'Fredoka', sans-serif;
-  color: var(--green);
-  font-size: 1.6rem;
-}
-
-.progress-heading p {
   margin: 0;
-  color: var(--gray);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
-.progress-tracker,
-.progress-steps,
-#progressTracker {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.progress-tracker {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   gap: 10px;
-  flex-wrap: wrap;
 }
 
 .progress-step {
-  flex: 1;
-  min-width: 65px;
-  text-align: center;
-  padding: 10px 5px;
-  border-radius: var(--rounded-small);
+  min-width: 0;
+  padding: 10px 4px;
   background: var(--light-gray);
   border: 2px solid var(--border);
-  transition: 0.2s ease;
-}
-
-.progress-step.completed,
-.progress-step.active {
-  background: #E3F7EC;
-  border-color: var(--green);
+  border-radius: 12px;
+  text-align: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .progress-step .step-number {
   display: block;
-  font-size: 1.2rem;
-  font-weight: 900;
-}
-
-.progress-step .step-label {
-  font-size: 0.8rem;
+  margin-bottom: 3px;
+  color: var(--gray);
+  font-size: 0.75rem;
   font-weight: 800;
 }
 
-.letter,
-.secret-letter,
-.progress-letter {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 38px;
-  height: 38px;
-  margin-top: 5px;
-
-  background: var(--yellow);
+.progress-step .step-letter {
+  display: block;
   color: var(--dark);
-  border: 2px solid #E2B900;
-  border-radius: 10px;
-
-  font-size: 1.2rem;
-  font-weight: 900;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 600;
 }
 
-.secret-word {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 16px;
+.progress-step.completed {
+  background: var(--light-yellow);
+  border-color: var(--yellow);
 }
 
-.secret-word span {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 42px;
-  height: 48px;
-
-  background: #FFF8D8;
-  border: 2px dashed #E2B900;
-  border-radius: 10px;
-
-  font-size: 1.4rem;
-  font-weight: 900;
+.progress-step.completed .step-letter {
   color: var(--dark);
+}
+
+.progress-step.active {
+  border: 3px solid var(--green);
 }
 
 
 /* =========================================================
-   4. PUZZLE CARDS
+   6. PUZZLE CARDS
    ========================================================= */
 
-.puzzle,
-.puzzle-card,
-section.puzzle {
-  width: 100%;
-  max-width: 1050px;
-  margin: 0 auto 24px;
-  padding: 28px;
-
+.puzzle {
+  display: none;
+  margin-bottom: 24px;
+  padding: clamp(20px, 4vw, 34px);
   background: var(--white);
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  border-radius: var(--rounded);
+  border-radius: var(--card-radius);
   box-shadow: var(--shadow);
-
-  animation: cardAppear 0.35s ease;
+  animation: fadeIn 0.3s ease;
 }
 
-@keyframes cardAppear {
+.puzzle.active {
+  display: block;
+}
+
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -273,182 +242,152 @@ section.puzzle {
 
 .puzzle-heading {
   margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.puzzle-heading .level {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 5px 12px;
+  background: var(--yellow);
+  border-radius: 20px;
+  color: var(--dark);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .puzzle-heading h2 {
-  margin: 8px 0;
-  color: var(--green);
-  font-family: 'Fredoka', sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0 0 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .puzzle-heading p {
-  margin: 6px 0;
+  margin: 8px 0 0;
   color: var(--gray);
   font-size: 1rem;
 }
 
-.level,
-.puzzle-number {
-  display: inline-block;
-  padding: 5px 12px;
-
-  background: var(--yellow);
-  color: var(--dark);
-  border-radius: 20px;
-
-  font-size: 0.8rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+h3,
+h4 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
 }
 
-
-/* =========================================================
-   5. GENERAL TEXT AND INFORMATION BOXES
-   ========================================================= */
-
-h1, h2, h3, h4 {
-  line-height: 1.25;
+.puzzle h3 {
+  margin-top: 24px;
+  font-size: 1.25rem;
 }
 
-h3 {
-  color: var(--dark);
-  font-family: 'Fredoka', sans-serif;
-}
-
-p {
+.puzzle p {
   margin-top: 8px;
-  margin-bottom: 12px;
-}
-
-.instruction,
-.instructions,
-.info-box {
-  padding: 15px 18px;
-  margin: 16px 0;
-
-  background: #EAF7FF;
-  border-left: 5px solid var(--blue);
-  border-radius: var(--rounded-small);
-}
-
-.warning,
-.hint-box {
-  padding: 15px 18px;
-  margin: 16px 0;
-
-  background: #FFF3E8;
-  border-left: 5px solid var(--orange);
-  border-radius: var(--rounded-small);
-}
-
-.success-box {
-  padding: 15px 18px;
-  background: var(--success-light);
-  border-left: 5px solid var(--success);
-  border-radius: var(--rounded-small);
 }
 
 
 /* =========================================================
-   6. BUTTONS
+   7. INFORMATION AND INSTRUCTION BOXES
    ========================================================= */
 
-button,
-.primary-button,
-.secondary-button,
-.hint-button,
-.next-button,
-.turn-in-button {
-  font-family: 'Nunito', Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 900;
-  cursor: pointer;
-
-  border: none;
-  border-radius: 12px;
-  padding: 12px 20px;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    filter 0.15s ease;
+.info-box {
+  margin: 18px 0;
+  padding: 16px 18px;
+  background: var(--light-blue);
+  border-left: 5px solid var(--blue);
+  border-radius: var(--small-radius);
 }
 
-button:hover:not(:disabled),
-.primary-button:hover:not(:disabled),
-.secondary-button:hover:not(:disabled),
-.hint-button:hover:not(:disabled),
-.next-button:hover:not(:disabled),
-.turn-in-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-  filter: brightness(1.04);
+.info-box p {
+  margin: 0;
+}
+
+.info-box strong {
+  color: var(--dark);
+}
+
+.instruction-box {
+  margin: 18px 0;
+  padding: 16px 18px;
+  background: var(--light-yellow);
+  border-left: 5px solid var(--yellow);
+  border-radius: var(--small-radius);
+}
+
+.instruction-box p {
+  margin: 0;
+}
+
+
+/* =========================================================
+   8. BUTTONS
+   ========================================================= */
+
+button {
+  padding: 11px 20px;
+  border: 0;
+  border-radius: 9px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 900;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+  filter: brightness(0.96);
+  transform: translateY(-1px);
 }
 
 button:active:not(:disabled) {
   transform: translateY(0);
 }
 
-button:focus-visible,
-input:focus-visible {
-  outline: 3px solid var(--blue);
-  outline-offset: 3px;
-}
-
 button:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
+  opacity: 0.45;
 }
 
-.primary-button,
 #checkAnswer,
 #checkFlowchart,
 #checkLocations,
 #searchDrive,
-#insertFile {
-  background: var(--green);
-  color: var(--white);
-}
-
-.secondary-button {
-  background: var(--blue);
-  color: #14384A;
-}
-
-.hint-button,
-#hintButton,
-#hintFlowchart {
-  background: var(--orange);
-  color: #FFFFFF;
-}
-
-.next-button,
-#nextPuzzle,
-#nextPuzzle3,
-#nextPuzzle4,
-#nextPuzzle5,
-#nextPuzzle6 {
-  background: var(--yellow);
-  color: var(--dark);
-}
-
-.turn-in-button,
+#addFileButton,
+#insertFile,
 #turnInButton {
   background: var(--green);
   color: var(--white);
 }
 
-button + button {
-  margin-left: 6px;
+#hintButton,
+#hintFlowchart {
+  margin-left: 8px;
+  background: var(--light-orange);
+  color: #743A12;
+}
+
+#nextPuzzle,
+#nextPuzzle3,
+#nextPuzzle4,
+#nextPuzzle5,
+#nextPuzzle6 {
+  margin-top: 16px;
+  background: var(--yellow);
+  color: var(--dark);
+}
+
+#closeFilePicker,
+#removeAttachment {
+  background: var(--light-gray);
+  color: var(--dark);
+  border: 1px solid var(--border);
 }
 
 
 /* =========================================================
-   7. FEEDBACK AND HINT MESSAGES
+   9. FEEDBACK AND HINT MESSAGES
    ========================================================= */
 
 .feedback,
@@ -460,7 +399,7 @@ button + button {
 #submissionFeedback {
   margin-top: 16px;
   padding: 12px 16px;
-  border-radius: var(--rounded-small);
+  border-radius: var(--small-radius);
   font-weight: 800;
 }
 
@@ -470,82 +409,82 @@ button + button {
 #locationFeedback:empty,
 #filenameFeedback:empty,
 #searchFeedback:empty,
-#submissionFeedback:empty,
+#submissionFeedback:empty {
+  display: none;
+}
+
+.hint-message,
+#flowHint,
+#puzzle3Hint {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: var(--light-orange);
+  border-left: 4px solid var(--orange);
+  border-radius: var(--small-radius);
+  color: #743A12;
+  font-weight: 700;
+}
+
 .hint-message:empty,
 #flowHint:empty,
 #puzzle3Hint:empty {
   display: none;
 }
 
-.feedback.success,
-.feedback.correct,
+.correct,
 .success {
-  background: var(--success-light);
-  color: var(--success);
+  background: var(--light-green);
+  color: #125C38;
 }
 
-.feedback.error,
-.feedback.incorrect,
+.incorrect,
 .error {
-  background: var(--error-light);
-  color: var(--error);
-}
-
-.hint-message,
-#flowHint,
-#puzzle3Hint {
-  margin-top: 12px;
-  padding: 12px 16px;
-
-  background: #FFF3E8;
-  border-radius: var(--rounded-small);
-  border-left: 5px solid var(--orange);
-
-  color: #713A12;
-  font-weight: 700;
+  background: var(--light-orange);
+  color: #87351F;
 }
 
 
 /* =========================================================
-   8. PUZZLE 1: SEQUENCE CHALLENGE
+   10. PUZZLE 1 — PUT THE STEPS IN ORDER
    ========================================================= */
 
-#stepList,
-.step-list {
+#stepList {
   display: flex;
   flex-direction: column;
   gap: 10px;
-
   margin: 20px 0;
   padding: 0;
   list-style: none;
+  counter-reset: none;
 }
 
-#stepList li,
-.step-item {
+#stepList li {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-
-  padding: 15px 18px;
-
-  background: #EAF7FF;
-  border: 2px solid #B9E5FA;
-  border-radius: var(--rounded-small);
-
+  min-height: 58px;
+  padding: 14px 18px;
+  border: 2px solid transparent;
+  border-radius: 12px;
   color: var(--dark);
+  font-size: 1rem;
   font-weight: 800;
-
   cursor: grab;
-  touch-action: pan-y;
   user-select: none;
-
-  transition: 0.18s ease;
+  touch-action: pan-y;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-#stepList li:hover {
-  border-color: var(--blue);
-  box-shadow: 0 3px 10px rgba(72, 185, 242, 0.18);
+#stepList li:nth-child(odd) {
+  background: var(--light-lavender);
+  border-color: #CDAEF0;
+  color: #44305C;
+}
+
+#stepList li:nth-child(even) {
+  background: var(--light-blue);
+  border-color: #9BD8F5;
+  color: #174D69;
 }
 
 #stepList li:active {
@@ -553,9 +492,9 @@ button + button {
 }
 
 #stepList li.selected {
-  background: #FFF5C9;
-  border-color: var(--yellow);
-  box-shadow: 0 0 0 3px rgba(255, 207, 8, 0.25);
+  background: var(--light-yellow);
+  border: 3px solid var(--yellow);
+  color: var(--dark);
 }
 
 #stepList li.dragging {
@@ -563,281 +502,240 @@ button + button {
 }
 
 #stepList li.drag-over {
-  border-color: var(--orange);
-  background: #FFF0E4;
+  background: var(--light-orange);
+  border: 2px dashed var(--orange);
+}
+
+#stepList li:hover {
+  box-shadow: 0 3px 8px rgba(36, 51, 45, 0.1);
 }
 
 
 /* =========================================================
-   9. PUZZLE 2: FLOWCHART CHALLENGE
+   11. PUZZLE 2 — BUILD THE FLOWCHART
    ========================================================= */
-
-.flowchart-activity {
-  margin-top: 20px;
-}
 
 .draggable-pieces {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
-
-  padding: 18px;
-  margin: 16px 0;
-
+  margin: 20px 0;
+  padding: 16px;
   background: var(--light-gray);
   border: 2px dashed var(--border);
-  border-radius: var(--rounded);
+  border-radius: 12px;
 }
 
 .flow-piece {
   display: flex;
-  justify-content: center;
   align-items: center;
-
-  min-width: 120px;
-  min-height: 55px;
-  max-width: 220px;
-  padding: 12px 16px;
-
-  background: var(--lavender);
-  border: 2px solid #C3A2E9;
-  border-radius: 12px;
-
+  justify-content: center;
+  min-width: 110px;
+  min-height: 48px;
+  padding: 10px 16px;
+  background: var(--light-lavender);
+  border: 2px solid #CDAEF0;
+  border-radius: 10px;
   color: #44305C;
-  font-family: 'Nunito', Arial, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.95rem;
-  font-weight: 800;
-  line-height: 1.25;
+  font-weight: 900;
   text-align: center;
-
   cursor: grab;
-  touch-action: none;
   user-select: none;
+  touch-action: none;
+  box-shadow: 0 3px 6px rgba(36, 51, 45, 0.08);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-.flow-piece[data-piece="start"],
-.flow-piece[data-piece="finish"] {
-  background: #DDF5E6;
-  border-color: var(--green);
-  color: #145C38;
-  border-radius: 30px;
+.flow-piece:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(36, 51, 45, 0.14);
 }
 
-.flow-piece[data-piece="refresh"] {
-  background: #DFF3FD;
-  border-color: var(--blue);
-  color: #174D69;
-}
-
-.flow-piece[data-piece="loaded"] {
-  background: #FFF4BF;
-  border-color: var(--yellow);
-  color: #5D4A00;
-}
-
-.flow-piece[data-piece="check"] {
-  background: #FFE6D4;
-  border-color: var(--orange);
-  color: #71370C;
+.flow-piece.selected {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
 }
 
 .flow-piece.dragging {
   opacity: 0.45;
 }
 
-.flowchart-slots {
+.flow-piece[data-piece="start"],
+.flow-piece[data-piece="finish"] {
+  background: var(--light-green);
+  border-color: var(--green);
+  color: #125C38;
+  border-radius: 30px;
+}
+
+.flow-piece[data-piece="loaded"] {
+  background: var(--light-yellow);
+  border-color: var(--yellow);
+  color: #554500;
+  transform: rotate(0deg);
+}
+
+.flow-piece[data-piece="refresh"],
+.flow-piece[data-piece="check"] {
+  background: var(--light-blue);
+  border-color: var(--blue);
+  color: #174D69;
+}
+
+.flowchart {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin: 20px auto;
+  margin: 20px 0;
 }
 
 .flow-slot {
   display: flex;
-  justify-content: center;
   align-items: center;
-
-  width: 100%;
-  max-width: 260px;
-  min-height: 65px;
+  justify-content: center;
+  width: min(100%, 280px);
+  min-height: 64px;
   padding: 10px;
-
-  background: #F5F8F6;
-  border: 2px dashed #A8B9AF;
-  border-radius: 12px;
-
-  color: var(--gray);
-  font-weight: 800;
+  background: var(--light-gray);
+  border: 2px dashed #AEBDB4;
+  border-radius: 10px;
   text-align: center;
-
-  transition: 0.2s ease;
 }
 
 .flow-slot.filled {
-  background: #F1FAF5;
-  border: 2px solid var(--green);
+  border-style: solid;
+  border-color: var(--green);
+  background: var(--light-green);
 }
 
 .flow-slot.drag-over {
-  background: #FFF8D8;
+  background: var(--light-yellow);
   border-color: var(--yellow);
 }
 
 .flow-slot .flow-piece {
   width: 100%;
-  max-width: none;
+  cursor: pointer;
 }
 
 .flow-arrow {
-  color: var(--green);
-  font-size: 1.8rem;
+  color: var(--gray);
+  font-size: 1.5rem;
   font-weight: 900;
 }
 
-.decision-branches {
-  display: flex;
-  justify-content: center;
-  gap: 22px;
-  flex-wrap: wrap;
+#decisionBranches {
+  display: none;
   width: 100%;
-  margin-top: 14px;
+  margin-top: 12px;
+}
+
+.branch-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  width: 100%;
 }
 
 .branch {
-  flex: 1;
-  min-width: 180px;
-  max-width: 280px;
-  padding: 15px;
-
+  padding: 16px;
   background: var(--light-gray);
   border: 2px solid var(--border);
-  border-radius: var(--rounded-small);
+  border-radius: 12px;
   text-align: center;
 }
 
 .branch h4 {
-  margin: 0 0 10px;
-  font-family: 'Fredoka', sans-serif;
+  margin: 0 0 12px;
+  font-size: 1.1rem;
 }
 
 .branch:first-child {
-  border-color: var(--green);
-  background: #E7F7ED;
+  border-top: 5px solid var(--green);
 }
 
 .branch:last-child {
-  border-color: var(--orange);
-  background: #FFF0E4;
+  border-top: 5px solid var(--orange);
+}
+
+.branch .flow-slot {
+  width: 100%;
 }
 
 .branch p {
-  margin-bottom: 0;
-}
-
-
-/* Keep text inside flowchart pieces readable. */
-
-.flowchart-activity .flow-piece,
-.flowchart-activity .flow-piece * {
-  font-family: 'Nunito', Arial, sans-serif !important;
-  font-weight: 800;
-  line-height: 1.25;
+  color: var(--gray);
+  font-size: 0.9rem;
 }
 
 
 /* =========================================================
-   10. PUZZLE 3: FILE LOCATION QUESTIONS
+   12. PUZZLE 3 — WHERE DID IT GO?
    ========================================================= */
 
-.location-cards,
-.location-options {
+.location-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 14px;
   margin: 20px 0;
 }
 
-.location-card,
-.location-info {
-  padding: 18px;
-  background: #EAF7FF;
-  border: 2px solid #B9E5FA;
-  border-radius: var(--rounded-small);
+.location-card {
+  padding: 16px;
+  background: var(--light-blue);
+  border-radius: 12px;
   text-align: center;
 }
 
-.location-card:nth-child(2),
-.location-info:nth-child(2) {
-  background: #FFF6CF;
-  border-color: var(--yellow);
+.location-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
 }
 
-.location-card:nth-child(3),
-.location-info:nth-child(3) {
-  background: #F3E9FD;
-  border-color: var(--lavender);
+.location-card p {
+  margin: 0;
+  font-size: 0.9rem;
 }
 
-.location-card h3,
-.location-info h3 {
-  margin: 6px 0;
-  font-family: 'Fredoka', sans-serif;
-}
-
-.location-card p,
-.location-info p {
-  margin-bottom: 0;
-}
-
-.question,
 .location-question {
   margin: 18px 0;
   padding: 18px;
-
   background: var(--light-gray);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded-small);
+  border-radius: 12px;
 }
 
-.question p,
 .location-question p {
-  font-weight: 800;
+  margin: 0 0 12px;
+  font-weight: 900;
 }
 
-.question label,
 .location-question label {
   display: block;
-  padding: 9px 12px;
-  margin: 7px 0;
-
+  margin: 8px 0;
+  padding: 10px 12px;
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: 9px;
-
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.15s ease;
 }
 
-.question label:hover,
 .location-question label:hover {
-  background: #EAF7FF;
-  border-color: var(--blue);
+  background: var(--light-blue);
 }
 
-input[type="radio"],
-input[type="checkbox"] {
-  accent-color: var(--green);
+.location-question input[type="radio"] {
   margin-right: 8px;
+  accent-color: var(--green);
 }
 
 
 /* =========================================================
-   11. PUZZLE 4: CHOOSE A FILE NAME
+   13. PUZZLE 4 — NAME THAT FILE!
    ========================================================= */
 
-.filename-choices,
 #filenameChoices {
   display: flex;
   flex-direction: column;
@@ -845,398 +743,350 @@ input[type="checkbox"] {
   margin: 20px 0;
 }
 
-.filename-choice,
-#filenameChoices button {
+.filename-choice {
+  display: block;
   width: 100%;
-  margin: 0;
-  padding: 15px 18px;
-
+  padding: 14px 16px;
   background: var(--light-gray);
   border: 2px solid var(--border);
-  border-radius: var(--rounded-small);
-
+  border-radius: 10px;
   color: var(--dark);
+  font-weight: 800;
   text-align: left;
+  cursor: pointer;
 }
 
-#filenameChoices button:hover {
-  background: #FFF8D8;
-  border-color: var(--yellow);
+.filename-choice:hover {
+  background: var(--light-blue);
+  border-color: var(--blue);
 }
 
-#filenameChoices button.selected {
-  background: #FFF8D8;
-  border-color: var(--yellow);
+.filename-choice.selected {
+  background: var(--light-yellow);
+  border: 3px solid var(--yellow);
 }
 
 
 /* =========================================================
-   12. PUZZLE 5: SIMULATED GOOGLE DRIVE SEARCH
+   14. PUZZLE 5 — SEARCH AND FIND
    ========================================================= */
 
-.drive-search,
-.search-area {
+.drive-window {
   margin: 20px 0;
-  padding: 18px;
-
-  background: #F5F8F6;
-  border: 2px solid var(--border);
-  border-radius: var(--rounded);
-}
-
-.drive-search label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 900;
-}
-
-.search-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.search-row input,
-#driveSearch {
-  flex: 1;
-  min-width: 180px;
-  padding: 12px 14px;
-
-  border: 2px solid #B9C9BF;
-  border-radius: 10px;
-
-  font-family: inherit;
-  font-size: 1rem;
-}
-
-.search-row input:focus,
-#driveSearch:focus {
-  border-color: var(--blue);
-  outline: 3px solid rgba(72, 185, 242, 0.2);
-}
-
-.drive-file-list,
-#driveFileList {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 12px;
-  margin: 18px 0;
-}
-
-.drive-file,
-#driveFileList > * {
-  padding: 16px;
-
+  overflow: hidden;
   background: var(--white);
   border: 2px solid var(--border);
-  border-radius: var(--rounded-small);
-
-  cursor: pointer;
-  transition: 0.18s ease;
+  border-radius: 12px;
 }
 
-.drive-file:hover,
-#driveFileList > *:hover {
-  background: #EAF7FF;
+.drive-header {
+  padding: 14px 18px;
+  background: var(--light-blue);
+  border-bottom: 1px solid var(--border);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.drive-search {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px;
+}
+
+#driveSearch {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 11px 14px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  color: var(--dark);
+}
+
+#driveSearch:focus {
   border-color: var(--blue);
-  transform: translateY(-2px);
+  outline: none;
 }
 
-.drive-file.selected,
-#driveFileList > *.selected {
-  background: #FFF8D8;
-  border-color: var(--yellow);
-  box-shadow: 0 0 0 2px rgba(255, 207, 8, 0.2);
+#fileList,
+#driveFileList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 16px 16px;
 }
 
-.drive-file.hidden,
-#driveFileList > *.hidden {
-  display: none;
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 12px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.file-item:hover {
+  background: var(--light-blue);
+}
+
+.file-item.selected {
+  background: var(--light-yellow);
+  outline: 2px solid var(--yellow);
+}
+
+.file-item .file-icon {
+  font-size: 1.3rem;
+}
+
+.file-item .file-name {
+  font-weight: 800;
 }
 
 #searchStatus {
-  margin-top: 10px;
+  padding: 0 16px 14px;
   color: var(--gray);
-  font-weight: 700;
-}
-
-
-/* =========================================================
-   13. PUZZLE 6: SIMULATED CLASSROOM SUBMISSION
-   ========================================================= */
-
-.classroom,
-.assignment-page {
-  padding: 20px;
-  margin: 18px 0;
-
-  background: #F6F8FC;
-  border: 2px solid #DCE3ED;
-  border-radius: var(--rounded);
-}
-
-.assignment-header {
-  padding-bottom: 14px;
-  border-bottom: 2px solid #DCE3ED;
-}
-
-.assignment-header h3 {
-  color: #2867A5;
-  margin-top: 0;
-}
-
-.assignment-card,
-.your-work {
-  margin-top: 18px;
-  padding: 18px;
-
-  background: var(--white);
-  border: 1px solid #DCE3ED;
-  border-radius: var(--rounded-small);
-}
-
-.attachment-area,
-#attachmentArea {
-  margin-top: 14px;
-  padding: 16px;
-
-  background: #F5F8F6;
-  border: 2px dashed #A8B9AF;
-  border-radius: var(--rounded-small);
-}
-
-.attached-file,
-#attachedFile {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-
-  padding: 12px;
-
-  background: #E3F7EC;
-  border: 2px solid var(--green);
-  border-radius: 10px;
-}
-
-#attachedFileName {
-  font-weight: 900;
-  overflow-wrap: anywhere;
-}
-
-#removeAttachment {
-  background: var(--error-light);
-  color: var(--error);
-  padding: 8px 12px;
-}
-
-#addFileButton {
-  background: var(--blue);
-  color: #153E53;
-  margin-top: 12px;
-}
-
-.file-picker {
-  margin-top: 16px;
-  padding: 20px;
-
-  background: var(--white);
-  border: 3px solid var(--blue);
-  border-radius: var(--rounded);
-  box-shadow: var(--shadow);
-}
-
-.file-picker-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.file-picker-heading h4 {
-  margin: 0;
-  font-family: 'Fredoka', sans-serif;
-}
-
-#closeFilePicker {
-  background: var(--light-gray);
-  color: var(--dark);
-  padding: 8px 12px;
-}
-
-.picker-file {
-  display: block;
-  width: 100%;
-  margin: 8px 0;
-  padding: 13px 15px;
-
-  background: var(--light-gray);
-  border: 2px solid var(--border);
-  border-radius: 10px;
-
-  color: var(--dark);
-  text-align: left;
-}
-
-.picker-file:hover {
-  background: #EAF7FF;
-  border-color: var(--blue);
-}
-
-.picker-file.selected {
-  background: #FFF8D8;
-  border-color: var(--yellow);
-}
-
-#insertFile {
-  margin-top: 12px;
-}
-
-
-/* =========================================================
-   14. MISSION COMPLETE
-   ========================================================= */
-
-#missionComplete {
-  margin-top: 24px;
-  padding: 30px 22px;
-
-  background: var(--success-light);
-  border: 3px solid var(--green);
-  border-radius: var(--rounded);
-
-  text-align: center;
-}
-
-#missionComplete h2 {
-  color: var(--success);
-  font-family: 'Fredoka', sans-serif;
-  font-size: 2rem;
-}
-
-#missionComplete p {
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
-
-/* =========================================================
-   15. FOOTER
-   ========================================================= */
-
-footer {
-  max-width: 1050px;
-  margin: 25px auto 0;
-  padding: 16px;
-
-  color: rgba(255, 255, 255, 0.95);
-  text-align: center;
   font-size: 0.9rem;
   font-weight: 700;
 }
 
 
 /* =========================================================
-   16. HIDDEN PUZZLES AND ELEMENTS
+   15. PUZZLE 6 — ATTACH AND TURN IN
    ========================================================= */
 
-/* Preserve the existing puzzle navigation behavior. */
+.classroom-window {
+  margin: 20px 0;
+  overflow: hidden;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+}
 
-.puzzle.hidden,
-.hidden {
-  display: none !important;
+.classroom-header {
+  padding: 16px 20px;
+  background: var(--light-blue);
+  border-bottom: 1px solid var(--border);
+}
+
+.classroom-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.classroom-header p {
+  margin: 4px 0 0;
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+.classroom-content {
+  padding: 20px;
+}
+
+.classroom-content h3 {
+  margin-top: 0;
+}
+
+.attachment-area {
+  margin: 18px 0;
+  padding: 18px;
+  background: var(--light-gray);
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+}
+
+#noAttachment {
+  color: var(--gray);
+  font-weight: 700;
+}
+
+#attachedFile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  background: var(--light-green);
+  border: 1px solid var(--green);
+  border-radius: 8px;
+}
+
+#attachedFileName {
+  font-weight: 900;
+}
+
+#filePicker {
+  display: none;
+  margin-top: 18px;
+  padding: 18px;
+  background: var(--light-blue);
+  border: 2px solid var(--blue);
+  border-radius: 12px;
+}
+
+#filePicker h3 {
+  margin-top: 0;
+}
+
+.picker-file {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  color: var(--dark);
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+
+.picker-file:hover {
+  background: var(--light-yellow);
+  border-color: var(--yellow);
+}
+
+.picker-file.selected {
+  background: var(--light-green);
+  border-color: var(--green);
+}
+
+#turnInButton {
+  margin-top: 16px;
 }
 
 
 /* =========================================================
-   17. SMALL SCREEN / CHROMEBOOK RESPONSIVENESS
+   16. MISSION COMPLETE
+   ========================================================= */
+
+#missionComplete {
+  display: none;
+  margin: 24px 0;
+  padding: 30px 24px;
+  background: var(--light-yellow);
+  border: 3px solid var(--yellow);
+  border-radius: var(--card-radius);
+  text-align: center;
+}
+
+#missionComplete h2 {
+  margin-top: 0;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.2rem;
+}
+
+#missionComplete p {
+  max-width: 600px;
+  margin: 10px auto;
+  font-size: 1.05rem;
+}
+
+
+/* =========================================================
+   17. PAGE FOOTER
+   ========================================================= */
+
+footer {
+  padding: 20px;
+  color: var(--white);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+
+/* =========================================================
+   18. RESPONSIVE DESIGN
+   Adjust the layout for smaller screens.
    ========================================================= */
 
 @media (max-width: 700px) {
-  body {
-    padding: 12px 10px 28px;
+  main {
+    width: min(100% - 20px, 1050px);
   }
 
   header {
-    padding: 18px 10px;
+    padding: 24px 14px;
   }
 
-  header h1 {
-    font-size: 2rem;
+  .progress-container {
+    padding: 14px 10px;
   }
 
-  header p {
-    font-size: 1rem;
-  }
-
-  .puzzle,
-  .puzzle-card,
-  section.puzzle {
-    padding: 19px 15px;
-  }
-
-  .progress-container,
-  .progress-section,
-  #progressContainer {
-    padding: 15px 12px;
-  }
-
-  .progress-tracker,
-  .progress-steps,
-  #progressTracker {
-    gap: 6px;
+  .progress-tracker {
+    gap: 5px;
   }
 
   .progress-step {
-    min-width: 55px;
-    padding: 8px 3px;
+    padding: 8px 2px;
   }
 
-  .progress-step .step-label {
-    font-size: 0.7rem;
+  .progress-step .step-number {
+    font-size: 0.65rem;
   }
 
-  .letter,
-  .secret-letter,
-  .progress-letter {
-    width: 32px;
-    height: 32px;
+  .progress-step .step-letter {
+    font-size: 1.35rem;
   }
 
-  .secret-word span {
-    width: 36px;
-    height: 42px;
+  .puzzle {
+    padding: 20px 16px;
   }
 
-  .search-row {
-    flex-direction: column;
+  .location-cards {
+    grid-template-columns: 1fr;
   }
 
-  .search-row button,
-  .search-row input {
-    width: 100%;
+  .branch-container {
+    grid-template-columns: 1fr;
   }
 
-  .decision-branches {
-    flex-direction: column;
-    align-items: center;
+  .draggable-pieces {
+    gap: 8px;
   }
 
-  .branch {
-    width: 100%;
-    max-width: none;
+  .flow-piece {
+    min-width: 90px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .progress-step .step-number {
+    font-size: 0.55rem;
+  }
+
+  .progress-step .step-letter {
+    font-size: 1.1rem;
   }
 
   button {
-    max-width: 100%;
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  #hintButton,
+  #hintFlowchart {
+    margin-left: 0;
+  }
+
+  .drive-search {
+    flex-direction: column;
+  }
+
+  .drive-search button {
+    width: 100%;
   }
 }
 
 
 /* =========================================================
-   18. ACCESSIBILITY: REDUCED MOTION
+   19. ACCESSIBILITY — REDUCED MOTION
+   Respect device settings for people who prefer less motion.
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1245,6 +1095,7 @@ footer {
   *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
