@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation: Algorithm</title>
+  </head>
+  <body>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">    
+  
+<div class="page">
+
+  <header class="page-header">
+    <h1>🔐 Operation: Algorithm</h1>
+    <p>Complete four challenges to unlock the vault!</p>
+  </header>
+
+  <!-- PROGRESS TRACKER -->
+
+  <nav class="progress-tracker">
+  <div id="progress1" class="progress-step active">
+    <span>1</span><p>Algorithm Scramble</p>
+  </div>
+  <div id="progress2" class="progress-step locked">
+    <span>🔒</span><p>Build the Flowchart</p>
+  </div>
+  <div id="progress3" class="progress-step locked">
+    <span>🔒</span><p>Algorithm Logic</p>
+  </div>
+  <div id="progress4" class="progress-step locked">
+    <span>🔒</span><p>Student Decision</p>
+  </div>
+</nav>
+
+
+  <!-- ACTIVE PUZZLE -->
+
+  <main class="puzzle-card">
+
+    <section id="puzzle1">
+    <div class="puzzle-heading">
+      <span class="level">CHALLENGE 1 OF 4</span>
+      <h2>🔀 Puzzle 1: Algorithm Scramble</h2>
+      <p>
+        Unscramble the steps to log into a computer system.
+        Arrange them in the correct logical order.
+      </p>
+    </div>
+
+    <div class="activity-area">
+
+      <h3>Your Challenge</h3>
+
+      <div class="placeholder">
+        
+<div class="scramble-activity">
+
+  <p class="instructions">
+    Drag and drop the steps to put them in the correct order.
+  </p>
+
+  <ol id="stepList" class="step-list">
+
+    <li draggable="true" data-step="4">
+      ✏️ Enter username and password
+    </li>
+
+    <li draggable="true" data-step="1">
+      🔌 Check if computer is plugged in
+    </li>
+
+    <li draggable="true" data-step="5">
+      👆 Click the "Login" button
+    </li>
+
+    <li draggable="true" data-step="2">
+      ⚡ Press the power button
+    </li>
+
+    <li draggable="true" data-step="3">
+      ⏳ Wait for login screen to appear
+    </li>
+
+  </ol>
+
+  <div class="button-area">
+
+    <button id="checkAnswer">Check Answer</button>
+
+    <button id="hintButton" class="hint-button">
+      💡 Hint
+    </button>
+
+    <button id="nextPuzzle" class="next-button" hidden>
+  Next Puzzle →
+</button>
+
+  </div>
+
+  <div id="feedback" class="feedback"></div>
+
+  <div id="hintMessage" class="hint-message"></div>
+
+</div>
+
+      </div>
+
+    </div>
+
+    <div class="puzzle-footer">
+      <p>Complete this challenge to unlock the next puzzle!</p>
+    </div>
+    </section>
+    
+<!-- PUZZLE 2 -->
+<section id="puzzle2" class="puzzle-section" hidden>
+
+  <div class="puzzle-heading">
+  <span class="level">CHALLENGE 2 OF 4</span>
+  <h2>📚 Puzzle 2: Build the Flowchart</h2>
+  <p>
+    You arrive at school and need to get your materials for the morning classes. What is the correct sequence of steps you need to tkae to unlock your locker and get ready for the day.
+  </p>
+</div>
+
+<div class="flowchart-activity">
+
+  <div class="shape-palette">
+    <h3>Available Shapes</h3>
+    <p>Drag each piece into the flowchart.</p>
+
+    <div class="draggable-pieces">
+
+  <div class="flow-piece start-piece" draggable="true" data-piece="start">
+    START
+  </div>
+
+  <div class="flow-piece process-piece" draggable="true" data-piece="locker">
+    Go to your locker
+  </div>
+
+  <div class="flow-piece process-piece" draggable="true" data-piece="combination">
+    Enter your combination
+  </div>
+
+  <div class="flow-piece decision-piece" draggable="true" data-piece="decision">
+    Does the locker open?
+  </div>
+
+  <div class="flow-piece process-piece" draggable="true" data-piece="materials">
+    Get materials for morning classes
+  </div>
+
+  <div class="flow-piece process-piece" draggable="true" data-piece="secure">
+    Close locker and secure lock
+  </div>
+
+  <div class="flow-piece process-piece" draggable="true" data-piece="retry">
+    Check combination and try again
+  </div>
+
+  <div class="flow-piece end-piece" draggable="true" data-piece="end">
+    END
+  </div>
+
+</div>
+  </div>
+
+  <div class="flowchart-workspace">
+  <h3>Flowchart Diagram</h3>
+  <p>Drag the shapes into the correct places.</p>
+
+  <div class="flow-column">
+
+    <div class="flow-slot" data-answer="start"></div>
+    <div class="arrow">↓</div>
+
+    <div class="flow-slot" data-answer="locker"></div>
+    <div class="arrow">↓</div>
+
+    <div class="flow-slot" data-answer="combination"></div>
+    <div class="arrow">↓</div>
+
+    <div class="flow-slot decision-slot" data-answer="decision"></div>
+
+  </div>
+
+  <!-- Branches appear after the decision is placed -->
+  <div id="decisionBranches" hidden>
+
+    <div class="branch-area">
+
+      <div class="branch">
+        <h4>YES</h4>
+        <div class="arrow">↓</div>
+        <div class="flow-slot" data-answer="materials"></div>
+        <div class="arrow">↓</div>
+        <div class="flow-slot" data-answer="secure"></div>
+      </div>
+
+      <div class="branch">
+        <h4>NO</h4>
+        <div class="arrow">↓</div>
+        <div class="flow-slot" data-answer="retry"></div>
+        <div class="arrow">↶</div>
+        <p>Return to Enter your combination</p>
+      </div>
+
+    </div>
+
+    <p class="merge-note">After securing your locker, follow the path to END.</p>
+
+    <div class="arrow">↓</div>
+    <div class="flow-slot end-slot" data-answer="end"></div>
+
+  </div>
+</div>
+</div>
+
+<div class="button-area">
+  <button id="checkFlowchart">Check Answer</button>
+  <button id="hintFlowchart" class="hint-button">💡 Hint</button>
+  <button id="nextPuzzle3" class="next-button" hidden>
+    Next Puzzle →
+  </button>
+</div>
+
+<div id="flowFeedback" class="feedback"></div>
+<div id="flowHint" class="hint-message"></div>
+
+</section>
+
+<!-- PUZZLE 3 -->
+    
+<section id="puzzle3" class="puzzle-section" hidden>
+
+  <div class="puzzle-heading">
+    <span class="level">CHALLENGE 3 OF 4</span>
+    <h2>🧠 Puzzle 3: Find the Largest Number</h2>
+
+    <p>
+      Looking at a short list of numbers, you might quickly spot the largest
+      number. But what if a computer had to search through hundreds, thousands,
+      or even millions of numbers?
+    </p>
+
+    <p>
+      A computer needs step-by-step instructions to solve this problem.
+      In this challenge, you'll build an algorithm that checks each number,
+      keeps track of the largest one, and reports the answer when it reaches
+      the end of the list.
+    </p>
+  </div>
+
+
+<div class="flowchart-activity">
+
+  <div class="shape-palette">
+    <h3>Available Steps</h3>
+    <p>Drag each piece into the flowchart.</p>
+
+    <div class="draggable-pieces" id="pieces3">
+      <div class="flow-piece start-piece" draggable="true" data-piece="start3">START</div>
+      <div class="flow-piece process-piece" draggable="true" data-piece="initialize">Set the largest number to the first number in the list.</div>
+      <div class="flow-piece process-piece" draggable="true" data-piece="next">Look at the next number in the list.</div>
+      <div class="flow-piece decision-piece" draggable="true" data-piece="compare">Is this number larger than the current largest number?</div>
+      <div class="flow-piece process-piece" draggable="true" data-piece="update">Update the largest number.</div>
+      <div class="flow-piece decision-piece" draggable="true" data-piece="more">Are there more numbers to check?</div>
+      <div class="flow-piece process-piece" draggable="true" data-piece="report">Report the largest number.</div>
+      <div class="flow-piece end-piece" draggable="true" data-piece="end3">END</div>
+    </div>
+  </div>
+
+  <div class="flowchart-workspace">
+    <h3>Build the Algorithm</h3>
+    <p>Your challenge: Arrange the steps to show how a computer finds the largest number.</p>
+
+    <div class="flow-column">
+      <div class="flow-slot" data-answer="start3"></div>
+      <div class="arrow">↓</div>
+      <div class="flow-slot" data-answer="initialize"></div>
+      <div class="arrow">↓</div>
+      <div class="flow-slot" data-answer="next"></div>
+      <div class="arrow">↓</div>
+      <div class="flow-slot decision-slot" data-answer="compare"></div>
+    </div>
+
+    <div id="compareBranches" hidden>
+      <div class="branch-area">
+        <div class="branch">
+          <h4>YES</h4>
+          <div class="arrow">↓</div>
+          <div class="flow-slot" data-answer="update"></div>
+        </div>
+
+        <div class="branch">
+          <h4>NO</h4>
+          <div class="arrow">↓</div>
+          <p>Keep the current largest number</p>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <div class="flow-column">
+        <div class="flow-slot decision-slot" data-answer="more"></div>
+      </div>
+
+      <div id="moreBranches" hidden>
+        <div class="branch-area">
+          <div class="branch">
+            <h4>YES</h4>
+            <div class="arrow">↶</div>
+            <p>Return to Look at the next number</p>
+          </div>
+
+          <div class="branch">
+            <h4>NO</h4>
+            <div class="arrow">↓</div>
+            <div class="flow-slot" data-answer="report"></div>
+            <div class="arrow">↓</div>
+            <div class="flow-slot end-slot" data-answer="end3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  
+<div class="button-area">
+  <button id="checkPuzzle3">Check Answer</button>
+  <button id="hintPuzzle3" class="hint-button">💡 Hint</button>
+  <button id="nextPuzzle4" class="next-button" hidden>Final Challenge →</button>
+</div>
+
+<div id="puzzle3Feedback" class="feedback"></div>
+<div id="puzzle3Hint" class="hint-message"></div>
+</section>
+
+<!-- PUZZLE 4 -->
+
+<section id="puzzle4" class="puzzle-section" hidden>
+
+  <div class="puzzle-heading">
+    <span class="level">FINAL CHALLENGE • PUZZLE 4</span>
+<h2>🐞 Algorithm Debugger: Moana Ticket Booth</h2>
+<p>
+  Your school is putting on the play <em>Moana</em>, and families can order
+  tickets through an online ticket system. The system is supposed to make
+  ordering tickets easy, but something isn't working right!
+  In each round, read the situation and study the algorithm.
+  Can you figure out the problem and choose the best fix?
+</p>
+  </div>
+
+  <div class="debugger-activity">
+
+    <div class="debugger-progress">
+      <span id="debugRound">ROUND 1 OF 4</span>
+      <span id="debugScore">0 correct</span>
+    </div>
+
+    <h3 id="debugTitle">Check the Inventory</h3>
+    <p id="debugScenario"></p>
+
+    <div class="algorithm-box">
+      <h4>THE ALGORITHM</h4>
+      <ol id="debugSteps"></ol>
+    </div>
+
+    <h3 id="debugQuestion">What is the problem?</h3>
+
+    <div id="debugChoices" class="debug-choices"></div>
+
+    <div id="debugFeedback" class="feedback"></div>
+
+    <div class="button-area">
+      <button id="checkDebugAnswer">Check Answer</button>
+      <button id="nextDebugRound" class="next-button" hidden>Next Round →</button>
+    </div>
+
+  </div>
+
+  <div id="vaultComplete" hidden>
+    <h2>🔓 Mission Accomplished!</h2>
+    <p>🎉 Congratulations! Mission Complete!</p>
+      <p>You completed all four challenges in <strong>Operation: Algorithm!</strong></p>
+      <p>You used <strong>sequencing</strong>, <strong>decisions</strong>, <strong>loops</strong>, and <strong>debugging</strong> to solve problems–skills that computer scientists use every day.</p>
+      <p>But these skills aren't just for computers! People use them to plan events, follow recipes, organize schedules, solve problems, and figure out what to do when things don't go as planned.</p>
+      <p>The big takeaway: <strong>No matter what you do in the future, knowing how to break down a problem, test a solution, and make improvements is a valuable skill!</strong></p>
+  </div>
+
+</section>
+
+  </main>
+
+
+</div>
+
+
+    <script src="./script.js"></script>
+  </body>
+</html>
