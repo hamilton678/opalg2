@@ -118,13 +118,21 @@ function completePuzzle(puzzleNumber) {
     }
   }
 
-  // Unlock the next progress step.
-  const nextStep = getElement("progress" + (puzzleNumber + 1));
+// Unlock the next progress step and show its blue indicator dot.
+const nextPuzzleNumber = puzzleNumber + 1;
+const nextStep = getElement("progress" + nextPuzzleNumber);
 
-  if (nextStep) {
-    nextStep.classList.remove("locked");
-    nextStep.classList.add("active");
+if (nextStep) {
+  nextStep.classList.remove("locked");
+  nextStep.classList.add("active");
+
+  // Add the blue dot above the next puzzle number.
+  const nextIndicator = getElement("indicator" + nextPuzzleNumber);
+
+  if (nextIndicator) {
+    nextIndicator.innerHTML = '<span class="active-dot"></span>';
   }
+}
 }
 
 
