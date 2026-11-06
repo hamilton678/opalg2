@@ -1,406 +1,917 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="./style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operation: Algorithm</title>
-  </head>
-  <body>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">    
-  
-<div class="page">
 
-  <header class="page-header">
-    <h1>🔐 Operation: Algorithm</h1>
-    <p>Complete four challenges to unlock the vault!</p>
-  </header>
+<head>
+  <meta charset="UTF-8">
 
-  <!-- PROGRESS TRACKER -->
+  <!-- Helps the page fit properly on phones and tablets. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <nav class="progress-tracker">
-  <div id="progress1" class="progress-step active">
-    <span>1</span><p>Algorithm Scramble</p>
-  </div>
-  <div id="progress2" class="progress-step locked">
-    <span>🔒</span><p>Build the Flowchart</p>
-  </div>
-  <div id="progress3" class="progress-step locked">
-    <span>🔒</span><p>Algorithm Logic</p>
-  </div>
-  <div id="progress4" class="progress-step locked">
-    <span>🔒</span><p>Student Decision</p>
-  </div>
-</nav>
+  <title>Operation: Algorithm</title>
 
+  <!-- Google Fonts: Bungee for the main title, Fredoka for headings,
+       and Nunito for directions and activity text. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- ACTIVE PUZZLE -->
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
-  <main class="puzzle-card">
+  <!-- Connects this HTML file to the separate design file. -->
+  <link rel="stylesheet" href="style.css">
+</head>
 
-    <section id="puzzle1">
-    <div class="puzzle-heading">
-      <span class="level">CHALLENGE 1 OF 4</span>
-      <h2>🔀 Puzzle 1: Algorithm Scramble</h2>
-      <p>
-        Unscramble the steps to log into a computer system.
-        Arrange them in the correct logical order.
+<body>
+
+  <div class="page">
+
+    <!-- =========================================
+         PAGE HEADER
+         The title and story introduction.
+    ========================================== -->
+
+    <header class="page-header">
+      <div class="header-icon">📁</div>
+
+      <h1>Operation: Algorithm</h1>
+
+      <p class="subtitle">
+        Your assignment is due, but you can't find the file!
       </p>
-    </div>
 
-    <div class="activity-area">
+      <p class="story-intro">
+        Complete six challenges to find your document and turn it in.
+        Each completed challenge earns you a letter. Collect all six letters
+        to finish your mission!
+      </p>
+    </header>
 
-      <h3>Your Challenge</h3>
 
-      <div class="placeholder">
-        
-<div class="scramble-activity">
+    <!-- =========================================
+         PROGRESS TRACKER
+         Each puzzle awards one letter toward ATTACH.
+         JavaScript will update the letters as students
+         complete each challenge.
+    ========================================== -->
 
-  <p class="instructions">
-    Drag and drop the steps to put them in the correct order.
-  </p>
+    <section class="progress-section" aria-label="Mission progress">
 
-  <ol id="stepList" class="step-list">
+      <div class="progress-heading">
+        <h2>Your Mission Progress</h2>
+        <p>Collect all six letters!</p>
+      </div>
 
-    <li draggable="true" data-step="4">
-      ✏️ Enter username and password
-    </li>
+      <div class="progress-tracker">
 
-    <li draggable="true" data-step="1">
-      🔌 Check if computer is plugged in
-    </li>
+        <div class="progress-step active" id="progress1">
+          <span class="progress-number">1</span>
+          <p>Log In</p>
+          <strong class="progress-letter" id="letter1">?</strong>
+        </div>
 
-    <li draggable="true" data-step="5">
-      👆 Click the "Login" button
-    </li>
+        <div class="progress-step locked" id="progress2">
+          <span class="progress-number">2</span>
+          <p>Troubleshoot</p>
+          <strong class="progress-letter" id="letter2">?</strong>
+        </div>
 
-    <li draggable="true" data-step="2">
-      ⚡ Press the power button
-    </li>
+        <div class="progress-step locked" id="progress3">
+          <span class="progress-number">3</span>
+          <p>File Locations</p>
+          <strong class="progress-letter" id="letter3">?</strong>
+        </div>
 
-    <li draggable="true" data-step="3">
-      ⏳ Wait for login screen to appear
-    </li>
+        <div class="progress-step locked" id="progress4">
+          <span class="progress-number">4</span>
+          <p>File Names</p>
+          <strong class="progress-letter" id="letter4">?</strong>
+        </div>
 
-  </ol>
+        <div class="progress-step locked" id="progress5">
+          <span class="progress-number">5</span>
+          <p>Search</p>
+          <strong class="progress-letter" id="letter5">?</strong>
+        </div>
 
-  <div class="button-area">
-
-    <button id="checkAnswer">Check Answer</button>
-
-    <button id="hintButton" class="hint-button">
-      💡 Hint
-    </button>
-
-    <button id="nextPuzzle" class="next-button" hidden>
-  Next Puzzle →
-</button>
-
-  </div>
-
-  <div id="feedback" class="feedback"></div>
-
-  <div id="hintMessage" class="hint-message"></div>
-
-</div>
+        <div class="progress-step locked" id="progress6">
+          <span class="progress-number">6</span>
+          <p>Attach</p>
+          <strong class="progress-letter" id="letter6">?</strong>
+        </div>
 
       </div>
 
-    </div>
+      <!-- The secret word will be revealed as letters are earned. -->
+      <div class="secret-word-area">
+        <p>SECRET WORD</p>
+        <div class="secret-word" id="secretWord">
+          <span>_</span>
+          <span>_</span>
+          <span>_</span>
+          <span>_</span>
+          <span>_</span>
+          <span>_</span>
+        </div>
+      </div>
 
-    <div class="puzzle-footer">
-      <p>Complete this challenge to unlock the next puzzle!</p>
-    </div>
     </section>
-    
-<!-- PUZZLE 2 -->
-<section id="puzzle2" class="puzzle-section" hidden>
-
-  <div class="puzzle-heading">
-  <span class="level">CHALLENGE 2 OF 4</span>
-  <h2>📚 Puzzle 2: Build the Flowchart</h2>
-  <p>
-    You arrive at school and need to get your materials for the morning classes. What is the correct sequence of steps you need to tkae to unlock your locker and get ready for the day.
-  </p>
-</div>
-
-<div class="flowchart-activity">
-
-  <div class="shape-palette">
-    <h3>Available Shapes</h3>
-    <p>Drag each piece into the flowchart.</p>
-
-    <div class="draggable-pieces">
-
-  <div class="flow-piece start-piece" draggable="true" data-piece="start">
-    START
-  </div>
-
-  <div class="flow-piece process-piece" draggable="true" data-piece="locker">
-    Go to your locker
-  </div>
-
-  <div class="flow-piece process-piece" draggable="true" data-piece="combination">
-    Enter your combination
-  </div>
-
-  <div class="flow-piece decision-piece" draggable="true" data-piece="decision">
-    Does the locker open?
-  </div>
-
-  <div class="flow-piece process-piece" draggable="true" data-piece="materials">
-    Get materials for morning classes
-  </div>
-
-  <div class="flow-piece process-piece" draggable="true" data-piece="secure">
-    Close locker and secure lock
-  </div>
-
-  <div class="flow-piece process-piece" draggable="true" data-piece="retry">
-    Check combination and try again
-  </div>
-
-  <div class="flow-piece end-piece" draggable="true" data-piece="end">
-    END
-  </div>
-
-</div>
-  </div>
-
-  <div class="flowchart-workspace">
-  <h3>Flowchart Diagram</h3>
-  <p>Drag the shapes into the correct places.</p>
-
-  <div class="flow-column">
-
-    <div class="flow-slot" data-answer="start"></div>
-    <div class="arrow">↓</div>
-
-    <div class="flow-slot" data-answer="locker"></div>
-    <div class="arrow">↓</div>
-
-    <div class="flow-slot" data-answer="combination"></div>
-    <div class="arrow">↓</div>
-
-    <div class="flow-slot decision-slot" data-answer="decision"></div>
-
-  </div>
-
-  <!-- Branches appear after the decision is placed -->
-  <div id="decisionBranches" hidden>
-
-    <div class="branch-area">
-
-      <div class="branch">
-        <h4>YES</h4>
-        <div class="arrow">↓</div>
-        <div class="flow-slot" data-answer="materials"></div>
-        <div class="arrow">↓</div>
-        <div class="flow-slot" data-answer="secure"></div>
-      </div>
-
-      <div class="branch">
-        <h4>NO</h4>
-        <div class="arrow">↓</div>
-        <div class="flow-slot" data-answer="retry"></div>
-        <div class="arrow">↶</div>
-        <p>Return to Enter your combination</p>
-      </div>
-
-    </div>
-
-    <p class="merge-note">After securing your locker, follow the path to END.</p>
-
-    <div class="arrow">↓</div>
-    <div class="flow-slot end-slot" data-answer="end"></div>
-
-  </div>
-</div>
-</div>
-
-<div class="button-area">
-  <button id="checkFlowchart">Check Answer</button>
-  <button id="hintFlowchart" class="hint-button">💡 Hint</button>
-  <button id="nextPuzzle3" class="next-button" hidden>
-    Next Puzzle →
-  </button>
-</div>
-
-<div id="flowFeedback" class="feedback"></div>
-<div id="flowHint" class="hint-message"></div>
-
-</section>
-
-<!-- PUZZLE 3 -->
-    
-<section id="puzzle3" class="puzzle-section" hidden>
-
-  <div class="puzzle-heading">
-    <span class="level">CHALLENGE 3 OF 4</span>
-    <h2>🧠 Puzzle 3: Find the Largest Number</h2>
-
-    <p>
-      Looking at a short list of numbers, you might quickly spot the largest
-      number. But what if a computer had to search through hundreds, thousands,
-      or even millions of numbers?
-    </p>
-
-    <p>
-      A computer needs step-by-step instructions to solve this problem.
-      In this challenge, you'll build an algorithm that checks each number,
-      keeps track of the largest one, and reports the answer when it reaches
-      the end of the list.
-    </p>
-  </div>
 
 
-<div class="flowchart-activity">
+    <!-- =========================================
+         MAIN PUZZLE CARD
+         All six puzzles live inside this card.
+         Only Puzzle 1 is visible at the beginning.
+    ========================================== -->
 
-  <div class="shape-palette">
-    <h3>Available Steps</h3>
-    <p>Drag each piece into the flowchart.</p>
+    <main class="puzzle-card">
 
-    <div class="draggable-pieces" id="pieces3">
-      <div class="flow-piece start-piece" draggable="true" data-piece="start3">START</div>
-      <div class="flow-piece process-piece" draggable="true" data-piece="initialize">Set the largest number to the first number in the list.</div>
-      <div class="flow-piece process-piece" draggable="true" data-piece="next">Look at the next number in the list.</div>
-      <div class="flow-piece decision-piece" draggable="true" data-piece="compare">Is this number larger than the current largest number?</div>
-      <div class="flow-piece process-piece" draggable="true" data-piece="update">Update the largest number.</div>
-      <div class="flow-piece decision-piece" draggable="true" data-piece="more">Are there more numbers to check?</div>
-      <div class="flow-piece process-piece" draggable="true" data-piece="report">Report the largest number.</div>
-      <div class="flow-piece end-piece" draggable="true" data-piece="end3">END</div>
-    </div>
-  </div>
 
-  <div class="flowchart-workspace">
-    <h3>Build the Algorithm</h3>
-    <p>Your challenge: Arrange the steps to show how a computer finds the largest number.</p>
+      <!-- =======================================
+           PUZZLE 1: LOG IN AND GET READY
+           Students arrange the Chromebook login
+           steps in the correct order.
+      ======================================== -->
 
-    <div class="flow-column">
-      <div class="flow-slot" data-answer="start3"></div>
-      <div class="arrow">↓</div>
-      <div class="flow-slot" data-answer="initialize"></div>
-      <div class="arrow">↓</div>
-      <div class="flow-slot" data-answer="next"></div>
-      <div class="arrow">↓</div>
-      <div class="flow-slot decision-slot" data-answer="compare"></div>
-    </div>
+      <section class="puzzle" id="puzzle1">
 
-    <div id="compareBranches" hidden>
-      <div class="branch-area">
-        <div class="branch">
-          <h4>YES</h4>
-          <div class="arrow">↓</div>
-          <div class="flow-slot" data-answer="update"></div>
+        <div class="puzzle-heading">
+          <span class="level">CHALLENGE 1 OF 6</span>
+
+          <h2>🔑 Log In and Get Ready</h2>
+
+          <p>
+            Before you can find your assignment, you need to get into your
+            Chromebook. But what happens if it doesn't turn on or your login
+            doesn't work?
+          </p>
         </div>
 
-        <div class="branch">
-          <h4>NO</h4>
-          <div class="arrow">↓</div>
-          <p>Keep the current largest number</p>
+        <div class="scenario-box">
+          <strong>Your situation:</strong>
+          <p>
+            You open your Chromebook to begin your assignment.
+            Put the steps in the correct order to get to your desktop.
+          </p>
         </div>
-      </div>
 
-      <div class="arrow">↓</div>
+        <div class="activity-area">
 
-      <div class="flow-column">
-        <div class="flow-slot decision-slot" data-answer="more"></div>
-      </div>
+          <p class="instructions">
+            <strong>Directions:</strong> Move the steps into the correct order.
+            Start with what you need to do first.
+          </p>
 
-      <div id="moreBranches" hidden>
-        <div class="branch-area">
-          <div class="branch">
-            <h4>YES</h4>
-            <div class="arrow">↶</div>
-            <p>Return to Look at the next number</p>
+          <!-- JavaScript will let students rearrange these list items. -->
+          <ol class="step-list" id="stepList">
+
+            <li draggable="true" data-step="3">
+              Enter your username and password.
+            </li>
+
+            <li draggable="true" data-step="5">
+              Reach your Chromebook desktop.
+            </li>
+
+            <li draggable="true" data-step="1">
+              Press the power button.
+            </li>
+
+            <li draggable="true" data-step="4">
+              If your login does not work, check your username and password
+              and try again.
+            </li>
+
+            <li draggable="true" data-step="2">
+              If the Chromebook does not turn on, connect the charger
+              and try turning it on again.
+            </li>
+
+          </ol>
+
+          <div class="button-area">
+            <button type="button" id="checkAnswer">
+              Check My Order
+            </button>
+
+            <button type="button" class="hint-button" id="hintButton">
+              💡 Hint
+            </button>
           </div>
 
-          <div class="branch">
-            <h4>NO</h4>
-            <div class="arrow">↓</div>
-            <div class="flow-slot" data-answer="report"></div>
-            <div class="arrow">↓</div>
-            <div class="flow-slot end-slot" data-answer="end3"></div>
+          <div class="feedback" id="feedback" aria-live="polite"></div>
+          <div class="hint-message" id="hintMessage"></div>
+
+          <button type="button" class="next-button" id="nextPuzzle" hidden>
+            Collect Letter A and Continue →
+          </button>
+
+        </div>
+      </section>
+
+
+      <!-- =======================================
+           PUZZLE 2: WHAT SHOULD YOU DO?
+           Students build a flowchart to troubleshoot
+           a slow or frozen Chromebook page.
+      ======================================== -->
+
+      <section class="puzzle" id="puzzle2" hidden>
+
+        <div class="puzzle-heading">
+          <span class="level">CHALLENGE 2 OF 6</span>
+
+          <h2>🛠️ What Should You Do?</h2>
+
+          <p>
+            Your Chromebook is on, but a webpage is taking forever to load.
+            You need a plan for deciding what to do next.
+          </p>
+        </div>
+
+        <div class="scenario-box">
+          <strong>Your situation:</strong>
+          <p>
+            Build a flowchart that helps someone troubleshoot a webpage
+            that is not loading.
+          </p>
+        </div>
+
+        <div class="vocabulary-note">
+          <strong>Quick review:</strong>
+          A <strong>flowchart</strong> shows the steps in a process.
+          A <strong>decision</strong> asks a question, usually with
+          YES or NO paths.
+        </div>
+
+        <div class="flowchart-activity">
+
+          <!-- Students choose shapes from this palette. -->
+          <div class="shape-palette">
+            <h3>Flowchart Pieces</h3>
+
+            <p class="small-instructions">
+              Move the correct pieces into the flowchart.
+            </p>
+
+            <div class="draggable-pieces">
+
+              <div class="flow-piece start-piece"
+                   draggable="true"
+                   data-piece="start">
+                START
+              </div>
+
+              <div class="flow-piece process-piece"
+                   draggable="true"
+                   data-piece="refresh">
+                Refresh the webpage.
+              </div>
+
+              <div class="flow-piece decision-piece"
+                   draggable="true"
+                   data-piece="loaded">
+                Did the page load?
+              </div>
+
+              <div class="flow-piece process-piece"
+                   draggable="true"
+                   data-piece="check">
+                Check your internet connection.
+              </div>
+
+              <div class="flow-piece end-piece"
+                   draggable="true"
+                   data-piece="finish">
+                END
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- Students place the shapes into these slots. -->
+          <div class="flowchart-workspace">
+
+            <h3>Build Your Flowchart</h3>
+
+            <div class="flow-column">
+
+              <div class="flow-slot" data-answer="start">
+                Drop START here
+              </div>
+
+              <div class="arrow">↓</div>
+
+              <div class="flow-slot" data-answer="refresh">
+                Drop a process here
+              </div>
+
+              <div class="arrow">↓</div>
+
+              <div class="flow-slot decision-slot" data-answer="loaded">
+                Drop a decision here
+              </div>
+
+            </div>
+
+            <!-- YES and NO branches appear after the decision
+                 shape is correctly placed. -->
+            <div class="branch-area" id="decisionBranches" hidden>
+
+              <div class="branch">
+                <h4>YES</h4>
+
+                <div class="flow-slot" data-answer="finish">
+                  Drop END here
+                </div>
+              </div>
+
+              <div class="branch">
+                <h4>NO</h4>
+
+                <div class="flow-slot" data-answer="check">
+                  Drop a process here
+                </div>
+
+                <div class="arrow">↓</div>
+
+                <p class="branch-note">
+                  Then try refreshing the page again.
+                </p>
+              </div>
+
+            </div>
+
+            <p class="merge-note">
+              A good troubleshooting plan helps you decide what to try next.
+            </p>
+
           </div>
         </div>
-      </div>
-    </div>
+
+        <div class="button-area">
+          <button type="button" id="checkFlowchart">
+            Check My Flowchart
+          </button>
+
+          <button type="button" class="hint-button" id="hintFlowchart">
+            💡 Hint
+          </button>
+        </div>
+
+        <div class="feedback" id="flowFeedback" aria-live="polite"></div>
+        <div class="hint-message" id="flowHint"></div>
+
+        <button type="button" class="next-button" id="nextPuzzle3" hidden>
+          Collect Letter T and Continue →
+        </button>
+
+      </section>
+
+
+      <!-- =======================================
+           PUZZLE 3: WHERE DID IT GO?
+           Students learn the difference between
+           Google Drive, Downloads, and the Files app.
+      ======================================== -->
+
+      <section class="puzzle" id="puzzle3" hidden>
+
+        <div class="puzzle-heading">
+          <span class="level">CHALLENGE 3 OF 6</span>
+
+          <h2>📂 Where Did It Go?</h2>
+
+          <p>
+            You created your assignment, but now you need to figure out
+            where it is stored. The trick is knowing which place to check!
+          </p>
+        </div>
+
+        <div class="scenario-box">
+          <strong>Your situation:</strong>
+          <p>
+            A classmate is looking for a document on a Chromebook.
+            Help identify where each file belongs.
+          </p>
+        </div>
+
+        <!-- These three explanations clarify the different roles
+             of Drive, Downloads, and the Files app. -->
+        <div class="location-guide">
+
+          <div class="location-card">
+            <div class="location-icon">☁️</div>
+            <h3>Google Drive</h3>
+            <p>
+              Online storage connected to your Google account.
+              Your Google Docs files are usually saved here.
+            </p>
+          </div>
+
+          <div class="location-card">
+            <div class="location-icon">⬇️</div>
+            <h3>Downloads</h3>
+            <p>
+              A folder on your Chromebook that holds files
+              you downloaded to the device.
+            </p>
+          </div>
+
+          <div class="location-card">
+            <div class="location-icon">📁</div>
+            <h3>Files App</h3>
+            <p>
+              The Chromebook app you use to browse locations
+              such as Downloads and Google Drive.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="activity-area">
+
+          <h3>Where Would You Look?</h3>
+
+          <p class="instructions">
+            Read each situation and choose the best answer.
+          </p>
+
+          <!-- JavaScript will create the questions and choices here. -->
+          <div class="location-questions" id="locationQuestions">
+
+            <div class="location-question" data-question="0">
+              <p>
+                <strong>1.</strong> You created a Google Doc while signed
+                into your school Google account. Where is it usually saved?
+              </p>
+
+              <div class="choice-list">
+                <button type="button" class="location-choice" data-choice="0">
+                  Downloads
+                </button>
+
+                <button type="button" class="location-choice" data-choice="1">
+                  Google Drive
+                </button>
+
+                <button type="button" class="location-choice" data-choice="2">
+                  The Recycle Bin
+                </button>
+              </div>
+
+              <div class="question-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="location-question" data-question="1">
+              <p>
+                <strong>2.</strong> You downloaded a PDF from a website.
+                Where should you look for it on your Chromebook?
+              </p>
+
+              <div class="choice-list">
+                <button type="button" class="location-choice" data-choice="0">
+                  Downloads
+                </button>
+
+                <button type="button" class="location-choice" data-choice="1">
+                  Google Classroom
+                </button>
+
+                <button type="button" class="location-choice" data-choice="2">
+                  The desktop wallpaper
+                </button>
+              </div>
+
+              <div class="question-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="location-question" data-question="2">
+              <p>
+                <strong>3.</strong> You want to browse both your downloaded
+                files and your Google Drive files on a Chromebook.
+                Which app can you use?
+              </p>
+
+              <div class="choice-list">
+                <button type="button" class="location-choice" data-choice="0">
+                  Calculator
+                </button>
+
+                <button type="button" class="location-choice" data-choice="1">
+                  Files
+                </button>
+
+                <button type="button" class="location-choice" data-choice="2">
+                  Camera
+                </button>
+              </div>
+
+              <div class="question-feedback" aria-live="polite"></div>
+            </div>
+
+          </div>
+
+          <div class="button-area">
+            <button type="button" id="checkLocations">
+              Check My Answers
+            </button>
+          </div>
+
+          <div class="feedback" id="locationFeedback" aria-live="polite"></div>
+
+          <button type="button" class="next-button" id="nextPuzzle4" hidden>
+            Collect Letter T and Continue →
+          </button>
+
+        </div>
+      </section>
+
+
+      <!-- =======================================
+           PUZZLE 4: NAME THAT FILE!
+           Students improve an unclear filename.
+      ======================================== -->
+
+      <section class="puzzle" id="puzzle4" hidden>
+
+        <div class="puzzle-heading">
+          <span class="level">CHALLENGE 4 OF 6</span>
+
+          <h2>✏️ Name That File!</h2>
+
+          <p>
+            You found several documents, but some have names that don't
+            tell you anything about their contents. It's time to give
+            your assignment a useful name!
+          </p>
+        </div>
+
+        <div class="scenario-box">
+          <strong>Your situation:</strong>
+          <p>
+            You created a Google Doc for your science assignment.
+            Its current name is "Untitled document." Choose a better name
+            so you can recognize it later.
+          </p>
+        </div>
+
+        <div class="file-example">
+
+          <div class="file-icon">📄</div>
+
+          <div class="file-details">
+            <span class="file-label">CURRENT FILE NAME</span>
+            <strong>Untitled document</strong>
+          </div>
+
+        </div>
+
+        <div class="naming-tip">
+          <strong>Helpful tip:</strong>
+          A useful filename tells you what the file is about.
+          Try including the class or subject and the topic.
+        </div>
+
+        <div class="activity-area">
+
+          <h3>Choose a Better Name</h3>
+
+          <p class="instructions">
+            Which filename would make this assignment easiest to find later?
+          </p>
+
+          <div class="filename-choices" id="filenameChoices">
+
+            <button type="button" class="filename-choice" data-choice="0">
+              Untitled document
+            </button>
+
+            <button type="button" class="filename-choice" data-choice="1">
+              My Work
+            </button>
+
+            <button type="button" class="filename-choice" data-choice="2">
+              Science Ecosystems Research
+            </button>
+
+            <button type="button" class="filename-choice" data-choice="3">
+              Document 7
+            </button>
+
+          </div>
+
+          <div class="feedback" id="filenameFeedback" aria-live="polite"></div>
+
+          <button type="button" class="next-button" id="nextPuzzle5" hidden>
+            Collect Letter A and Continue →
+          </button>
+
+        </div>
+      </section>
+
+
+      <!-- =======================================
+           PUZZLE 5: SEARCH AND FIND
+           Students use keywords to find the correct
+           document in a simulated Google Drive list.
+      ======================================== -->
+
+      <section class="puzzle" id="puzzle5" hidden>
+
+        <div class="puzzle-heading">
+          <span class="level">CHALLENGE 5 OF 6</span>
+
+          <h2>🔎 Search and Find</h2>
+
+          <p>
+            You gave your assignment a useful name. Now you need to find it
+            among all the other files in your Google Drive.
+          </p>
+        </div>
+
+        <div class="scenario-box">
+          <strong>Your situation:</strong>
+          <p>
+            Your missing assignment is called
+            <strong>Science Ecosystems Research</strong>.
+            Use the search bar to find the correct file.
+          </p>
+        </div>
+
+        <div class="drive-simulation">
+
+          <div class="drive-header">
+            <div class="drive-logo">☁️</div>
+            <h3>My Drive</h3>
+          </div>
+
+          <!-- This is a simulated search box.
+               It does not connect to an actual Google account. -->
+          <div class="drive-search">
+            <label for="driveSearch">Search files</label>
+
+            <div class="search-row">
+              <input
+                type="text"
+                id="driveSearch"
+                placeholder="Type a word from the filename..."
+                autocomplete="off"
+              >
+
+              <button type="button" id="searchDrive">
+                Search
+              </button>
+            </div>
+          </div>
+
+          <div class="drive-file-list" id="driveFileList">
+
+            <!-- JavaScript will display the matching files here. -->
+            <div class="drive-file" data-filename="Untitled document">
+              <span class="drive-file-icon">📄</span>
+              <span>Untitled document</span>
+            </div>
+
+            <div class="drive-file" data-filename="Math Fractions Practice">
+              <span class="drive-file-icon">📄</span>
+              <span>Math Fractions Practice</span>
+            </div>
+
+            <div class="drive-file" data-filename="Science Ecosystems Research">
+              <span class="drive-file-icon">📄</span>
+              <span>Science Ecosystems Research</span>
+            </div>
+
+            <div class="drive-file" data-filename="My Work">
+              <span class="drive-file-icon">📄</span>
+              <span>My Work</span>
+            </div>
+
+            <div class="drive-file" data-filename="History Notes">
+              <span class="drive-file-icon">📄</span>
+              <span>History Notes</span>
+            </div>
+
+            <div class="drive-file" data-filename="Document 7">
+              <span class="drive-file-icon">📄</span>
+              <span>Document 7</span>
+            </div>
+
+          </div>
+
+          <p class="search-status" id="searchStatus" aria-live="polite">
+            Search for your assignment.
+          </p>
+
+        </div>
+
+        <div class="feedback" id="searchFeedback" aria-live="polite"></div>
+
+        <button type="button" class="next-button" id="nextPuzzle6" hidden>
+          Collect Letter C and Continue →
+        </button>
+
+      </section>
+
+
+      <!-- =======================================
+           PUZZLE 6: ATTACH!
+           Students use a simulated Google Classroom
+           assignment page to attach and submit a file.
+      ======================================== -->
+
+      <section class="puzzle" id="puzzle6" hidden>
+
+        <div class="puzzle-heading">
+          <span class="level">CHALLENGE 6 OF 6</span>
+
+          <h2>📎 ATTACH!</h2>
+
+          <p>
+            You found your assignment! Now you need to attach the correct
+            document to your Google Classroom assignment and turn it in.
+          </p>
+        </div>
+
+        <div class="scenario-box">
+          <strong>Your final task:</strong>
+          <p>
+            Attach <strong>Science Ecosystems Research</strong> to the
+            assignment below. Then submit your work!
+          </p>
+        </div>
+
+        <!-- This section imitates a Classroom assignment.
+             It is a practice simulation, not a real Google Classroom page. -->
+        <div class="classroom-simulation">
+
+          <div class="classroom-topbar">
+            <span class="classroom-logo">📚</span>
+            <span>Classroom Practice</span>
+            <span class="simulation-label">SIMULATION</span>
+          </div>
+
+          <div class="classroom-assignment">
+
+            <span class="classroom-class">SCIENCE CLASS</span>
+
+            <h3>Ecosystems Research Assignment</h3>
+
+            <p class="assignment-due">
+              Due: Friday
+            </p>
+
+            <div class="assignment-instructions">
+              <strong>Assignment Instructions</strong>
+              <p>
+                Complete your research about an ecosystem. Attach your
+                finished document below and turn in your assignment.
+              </p>
+            </div>
+
+            <div class="your-work">
+
+              <h4>Your work</h4>
+
+              <div class="attachment-area" id="attachmentArea">
+
+                <div class="no-attachment" id="noAttachment">
+                  <span class="attachment-icon">📎</span>
+                  <p>No file attached yet.</p>
+                </div>
+
+                <!-- JavaScript will show the selected file here. -->
+                <div class="attached-file" id="attachedFile" hidden>
+                  <span class="attached-file-icon">📄</span>
+
+                  <div>
+                    <strong id="attachedFileName"></strong>
+                    <span class="attached-file-status">Attached</span>
+                  </div>
+
+                  <button type="button" id="removeAttachment"
+                          aria-label="Remove attached file">
+                    ✕
+                  </button>
+                </div>
+
+              </div>
+
+              <div class="attachment-actions">
+                <button type="button" id="addFileButton">
+                  + Add or Create
+                </button>
+              </div>
+
+              <!-- The file picker is a simulated Drive file list. -->
+              <div class="file-picker" id="filePicker" hidden>
+
+                <div class="file-picker-heading">
+                  <h4>Select a file</h4>
+                  <button type="button" id="closeFilePicker"
+                          aria-label="Close file picker">
+                    ✕
+                  </button>
+                </div>
+
+                <p>Google Drive</p>
+
+                <div class="picker-file-list">
+
+                  <button type="button" class="picker-file"
+                          data-file="Untitled document">
+                    <span>📄</span>
+                    Untitled document
+                  </button>
+
+                  <button type="button" class="picker-file"
+                          data-file="Math Fractions Practice">
+                    <span>📄</span>
+                    Math Fractions Practice
+                  </button>
+
+                  <button type="button" class="picker-file"
+                          data-file="Science Ecosystems Research">
+                    <span>📄</span>
+                    Science Ecosystems Research
+                  </button>
+
+                  <button type="button" class="picker-file"
+                          data-file="History Notes">
+                    <span>📄</span>
+                    History Notes
+                  </button>
+
+                </div>
+
+                <button type="button" id="insertFile" disabled>
+                  Insert
+                </button>
+
+              </div>
+
+              <button type="button" class="turn-in-button" id="turnInButton"
+                      disabled>
+                Turn In
+              </button>
+
+              <div class="feedback" id="submissionFeedback"
+                   aria-live="polite"></div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Final completion screen appears after successful submission. -->
+        <div class="mission-complete" id="missionComplete" hidden>
+
+          <div class="completion-icon">🎉</div>
+
+          <h2>MISSION COMPLETE!</h2>
+
+          <p>
+            You found your assignment, attached the correct file,
+            and turned it in!
+          </p>
+
+          <div class="final-secret-word">
+            <span>Your secret word:</span>
+            <strong>ATTACH</strong>
+          </div>
+
+          <p class="completion-message">
+            You also practiced real technology skills:
+            organizing information, using search, troubleshooting,
+            and submitting a file.
+          </p>
+
+          <p class="completion-tagline">
+            Operation: Algorithm — SUCCESS!
+          </p>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="puzzle-footer">
+      <p>Operation: Algorithm • Think carefully. Follow the steps. Do hard things!</p>
+    </footer>
+
   </div>
 
-</div>
 
-  
-<div class="button-area">
-  <button id="checkPuzzle3">Check Answer</button>
-  <button id="hintPuzzle3" class="hint-button">💡 Hint</button>
-  <button id="nextPuzzle4" class="next-button" hidden>Final Challenge →</button>
-</div>
+  <!-- Connects this page to the JavaScript interaction file.
+       The defer attribute waits until the HTML has been read
+       before running the script. -->
+  <script src="script.js" defer></script>
 
-<div id="puzzle3Feedback" class="feedback"></div>
-<div id="puzzle3Hint" class="hint-message"></div>
-</section>
-
-<!-- PUZZLE 4 -->
-
-<section id="puzzle4" class="puzzle-section" hidden>
-
-  <div class="puzzle-heading">
-    <span class="level">FINAL CHALLENGE • PUZZLE 4</span>
-<h2>🐞 Algorithm Debugger: Moana Ticket Booth</h2>
-<p>
-  Your school is putting on the play <em>Moana</em>, and families can order
-  tickets through an online ticket system. The system is supposed to make
-  ordering tickets easy, but something isn't working right!
-  In each round, read the situation and study the algorithm.
-  Can you figure out the problem and choose the best fix?
-</p>
-  </div>
-
-  <div class="debugger-activity">
-
-    <div class="debugger-progress">
-      <span id="debugRound">ROUND 1 OF 4</span>
-      <span id="debugScore">0 correct</span>
-    </div>
-
-    <h3 id="debugTitle">Check the Inventory</h3>
-    <p id="debugScenario"></p>
-
-    <div class="algorithm-box">
-      <h4>THE ALGORITHM</h4>
-      <ol id="debugSteps"></ol>
-    </div>
-
-    <h3 id="debugQuestion">What is the problem?</h3>
-
-    <div id="debugChoices" class="debug-choices"></div>
-
-    <div id="debugFeedback" class="feedback"></div>
-
-    <div class="button-area">
-      <button id="checkDebugAnswer">Check Answer</button>
-      <button id="nextDebugRound" class="next-button" hidden>Next Round →</button>
-    </div>
-
-  </div>
-
-  <div id="vaultComplete" hidden>
-    <h2>🔓 Mission Accomplished!</h2>
-    <p>🎉 Congratulations! Mission Complete!</p>
-      <p>You completed all four challenges in <strong>Operation: Algorithm!</strong></p>
-      <p>You used <strong>sequencing</strong>, <strong>decisions</strong>, <strong>loops</strong>, and <strong>debugging</strong> to solve problems–skills that computer scientists use every day.</p>
-      <p>But these skills aren't just for computers! People use them to plan events, follow recipes, organize schedules, solve problems, and figure out what to do when things don't go as planned.</p>
-      <p>The big takeaway: <strong>No matter what you do in the future, knowing how to break down a problem, test a solution, and make improvements is a valuable skill!</strong></p>
-  </div>
-
-</section>
-
-  </main>
-
-
-</div>
-
-
-    <script src="./script.js"></script>
-  </body>
+</body>
 </html>
