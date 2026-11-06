@@ -1158,3 +1158,15 @@ footer {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Make puzzle visibility follow the hidden attribute
+   controlled by JavaScript. */
+
+.puzzle[hidden] {
+  display: none !important;
+}
+
+.puzzle:not([hidden]) {
+  display: block;
+}
