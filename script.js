@@ -1,691 +1,1070 @@
 
-// FIND THE HTML ELEMENTS
+/* =========================================================
+   OPERATION: ALGORITHM
+   Main JavaScript File
 
-const stepList = document.getElementById("stepList");
-const checkButton = document.getElementById("checkAnswer");
-const hintButton = document.getElementById("hintButton");
-const feedback = document.getElementById("feedback");
-const hintMessage = document.getElementById("hintMessage");
-const progress1 = document.getElementById("progress1");
-const progress2 = document.getElementById("progress2");
-const nextPuzzleButton = document.getElementById("nextPuzzle");
+   This file makes the six puzzles interactive.
 
+   It controls:
+   1. The Chromebook login sequence
+   2. The troubleshooting flowchart
+   3. The file-location questions
+   4. The filename challenge
+   5. The simulated Google Drive search
+   6. The simulated Classroom submission
 
-// DRAG AND DROP FUNCTIONALITY
+   It also manages the progress tracker and secret word.
 
-let draggedItem = null;
-
-stepList.addEventListener("dragstart", function(event) {
-
-  draggedItem = event.target;
-
-  if (draggedItem.tagName !== "LI") {
-    draggedItem = null;
-    return;
-  }
-
-  draggedItem.classList.add("dragging");
-
-});
-
-stepList.addEventListener("dragover", function(event) {
-
-  event.preventDefault();
-
-  if (!draggedItem) return;
-
-  const otherItems = [
-    ...stepList.querySelectorAll("li:not(.dragging)")
-  ];
-
-  const nextItem = otherItems.find(function(item) {
-
-    const box = item.getBoundingClientRect();
-
-    return event.clientY < box.top + box.height / 2;
-
-  });
-
-  if (nextItem) {
-    stepList.insertBefore(draggedItem, nextItem);
-  } else {
-    stepList.appendChild(draggedItem);
-  }
-
-});
-
-stepList.addEventListener("dragend", function() {
-
-  if (draggedItem) {
-    draggedItem.classList.remove("dragging");
-  }
-
-  draggedItem = null;
-
-});
+   NOTE: This is a practice activity. It does not connect
+   to a student's real Chromebook, Google Drive, or Classroom.
+   ========================================================= */
 
 
-// CHECK THE ANSWER
+/* ---------------------------------------------------------
+   1. GENERAL PAGE SETUP
+   --------------------------------------------------------- */
 
-checkButton.addEventListener("click", function() {
+// A shortcut function for finding an HTML element by its ID.
+// Example: getElement("puzzle1") finds the element with id="puzzle1".
 
-  const currentOrder = [
-    ...stepList.children
-  ].map(function(item) {
-
-    return Number(item.dataset.step);
-
-  });
-
-  const correctOrder = [1, 2, 3, 4, 5];
-
-  const isCorrect = currentOrder.every(function(step, index) {
-
-    return step === correctOrder[index];
-
-  });
-
-  if (isCorrect) {
-  feedback.textContent = "✓ Excellent! You completed Puzzle 1!";
-  feedback.className = "feedback correct";
-  hintMessage.textContent = "";
-
-  progress1.classList.remove("active");
-  progress1.classList.add("completed");
-
-  progress2.classList.remove("locked");
-  progress2.classList.add("active");
-
-  progress2.querySelector("span").textContent = "2";
-
-  nextPuzzleButton.hidden = false;
-
-} else {
-  feedback.textContent = "✗ Not quite! Check the order and try again.";
-  feedback.className = "feedback incorrect";
+function getElement(id) {
+  return document.getElementById(id);
 }
 
-});
 
-
-// HINT BUTTON
-
-hintButton.addEventListener("click", function() {
-
-  hintMessage.textContent =
-    "💡 Hint: Before you can log in, the computer needs to be powered on and ready.";
-
-});
-
-nextPuzzleButton.addEventListener("click", function() {
-  document.getElementById("puzzle1").hidden = true;
-  document.getElementById("puzzle2").hidden = false;
-  scrollToPuzzle(2);
-});
-
-// randomize puzzle 2 steps
-const piecesContainer = document.querySelector(".draggable-pieces");
-
-function shufflePieces() {
-  const pieces = [...piecesContainer.children];
-
-  pieces.sort(() => Math.random() - 0.5);
-
-  pieces.forEach(function(piece) {
-    piecesContainer.appendChild(piece);
-  });
-}
-
-shufflePieces();
-
-
-// PUZZLE 2: DRAG AND DROP
-
-const flowPieces = document.querySelectorAll("#puzzle2 .flow-piece");
-const flowSlots = document.querySelectorAll("#puzzle2 .flow-slot");
-const decisionBranches = document.getElementById("decisionBranches");
-const decisionSlot = document.querySelector(
-  '#puzzle2 .flow-slot[data-answer="decision"]'
-);
-const shapePalette = document.querySelector("#puzzle2 .draggable-pieces");
-
-// Make each shape draggable
-flowPieces.forEach(function(piece) {
-  piece.addEventListener("dragstart", function(event) {
-    event.dataTransfer.setData("text/plain", piece.dataset.piece);
-  });
-});
-
-// Allow shapes to be dropped into flowchart boxes
-flowSlots.forEach(function(slot) {
-
-  slot.addEventListener("dragover", function(event) {
-    event.preventDefault();
-    slot.classList.add("drag-over");
-  });
-
-  slot.addEventListener("dragleave", function() {
-    slot.classList.remove("drag-over");
-  });
-
-  slot.addEventListener("drop", function(event) {
-    event.preventDefault();
-    slot.classList.remove("drag-over");
-
-    const pieceName = event.dataTransfer.getData("text/plain");
-    const piece = document.querySelector('#puzzle2 .flow-piece[data-piece="' + pieceName + '"]');
-
-    if (piece && slot.children.length === 0) {
-      const oldSlot = piece.parentElement;
-
-      if (oldSlot.classList.contains("flow-slot")) {
-        oldSlot.classList.remove("has-piece");
-      }
-      if (oldSlot === decisionSlot) {
-  decisionBranches.hidden = true;
-}
-
-      slot.appendChild(piece);
-      slot.classList.add("has-piece");
-      if (slot === decisionSlot && piece.dataset.piece === "decision") {
-  decisionBranches.hidden = false;
-}
-    }
-  });
-
-});
-
-// Allow students to return shapes to the palette
-shapePalette.addEventListener("dragover", function(event) {
-  event.preventDefault();
-});
-
-shapePalette.addEventListener("drop", function(event) {
-  event.preventDefault();
-
-  const pieceName = event.dataTransfer.getData("text/plain");
-  const piece = document.querySelector('#puzzle2 .flow-piece[data-piece="' + pieceName + '"]');
-
-  if (piece) {
-    const oldSlot = piece.parentElement;
-
-    if (oldSlot.classList.contains("flow-slot")) {
-      oldSlot.classList.remove("has-piece");
-    }
-
-    if (oldSlot === decisionSlot) {
-      decisionBranches.hidden = true;
-    }
-
-    shapePalette.appendChild(piece);
-  }
-});
-
-// PUZZLE 2: CHECK THE ANSWER
-
-const checkFlowchart = document.getElementById("checkFlowchart");
-const flowFeedback = document.getElementById("flowFeedback");
-const hintFlowchart = document.getElementById("hintFlowchart");
-const flowHint = document.getElementById("flowHint");
-const progress3 = document.getElementById("progress3");
-const progress4 = document.getElementById("progress4");
-const nextPuzzle3 = document.getElementById("nextPuzzle3");
-
-checkFlowchart.addEventListener("click", function() {
-
-  const allSlots = document.querySelectorAll(
-    "#puzzle2 .flow-slot"
-  );
-
-  let isCorrect = true;
-
-  allSlots.forEach(function(slot) {
-
-    const placedPiece = slot.querySelector(".flow-piece");
-
-    if (!placedPiece || placedPiece.dataset.piece !== slot.dataset.answer) {
-      isCorrect = false;
-    }
-
-  });
-
-if (isCorrect) {
-  flowFeedback.textContent = "✓ Excellent! You completed Puzzle 2!";
-  flowFeedback.className = "feedback correct";
-
-  progress2.classList.remove("active");
-  progress2.classList.add("completed");
-  progress2.querySelector("span").textContent = "2";
-
-  progress3.classList.remove("locked");
-  progress3.classList.add("active");
-  progress3.querySelector("span").textContent = "3";
-
-  nextPuzzle3.hidden = false;
-} else {
-    flowFeedback.textContent = "✗ Not quite! Check your shapes and their positions.";
-    flowFeedback.className = "feedback incorrect";
-  }
-
-});
-
-// PUZZLE 2: HINT BUTTON
-
-hintFlowchart.addEventListener("click", function() {
-
-  flowHint.textContent =
-    "💡 Hint: First, enter your combination. If the locker does not open, think about what you would do next. If it opens, think about why you are at your locker and what you need to be prepared.";
-
-});
-
-// NAVIGATE TO PUZZLE 3
-
-nextPuzzle3.addEventListener("click", function() {
-  document.getElementById("puzzle2").hidden = true;
-  shufflePieces3();
-  document.getElementById("puzzle3").hidden = false;
-  scrollToPuzzle(3);
-});
-
-
-// PUZZLE 3: DRAG AND DROP
-
-const palette3 = document.getElementById("pieces3");
-const pieces3 = document.querySelectorAll("#pieces3 .flow-piece");
-const slots3 = document.querySelectorAll("#puzzle3 .flow-slot");
-
-// Randomize Puzzle 3 pieces
-function shufflePieces3() {
-  const pieces = [...palette3.children];
-
-  for (let i = pieces.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-
-    [pieces[i], pieces[j]] = [pieces[j], pieces[i]];
-  }
-
-  pieces.forEach(function(piece) {
-    palette3.appendChild(piece);
-  });
-}
-
-shufflePieces3();
-
-const compareBranches = document.getElementById("compareBranches");
-const moreBranches = document.getElementById("moreBranches");
-
-// Make each Puzzle 3 piece draggable
-pieces3.forEach(function(piece) {
-  piece.addEventListener("dragstart", function(event) {
-    event.dataTransfer.setData("text/plain", piece.dataset.piece);
-  });
-});
-
-// Allow pieces to be dropped into Puzzle 3 boxes
-slots3.forEach(function(slot) {
-
-  slot.addEventListener("dragover", function(event) {
-    event.preventDefault();
-    slot.classList.add("drag-over");
-  });
-
-  slot.addEventListener("dragleave", function() {
-    slot.classList.remove("drag-over");
-  });
-
-  slot.addEventListener("drop", function(event) {
-    event.preventDefault();
-    slot.classList.remove("drag-over");
-
-    const pieceName = event.dataTransfer.getData("text/plain");
-    const piece = document.querySelector(
-  '#puzzle3 .flow-piece[data-piece="' + pieceName + '"]'
-);
-
-    if (piece && slot.children.length === 0) {
-
-      const oldSlot = piece.parentElement;
-
-      if (oldSlot.classList.contains("flow-slot")) {
-        oldSlot.classList.remove("has-piece");
-      }
-
-      if (oldSlot.dataset.answer === "compare") {
-        compareBranches.hidden = true;
-      }
-
-      if (oldSlot.dataset.answer === "more") {
-        moreBranches.hidden = true;
-      }
-
-      slot.appendChild(piece);
-      slot.classList.add("has-piece");
-
-      if (slot.dataset.answer === "compare" && piece.dataset.piece === "compare") {
-        compareBranches.hidden = false;
-      }
-
-      if (slot.dataset.answer === "more" && piece.dataset.piece === "more") {
-        moreBranches.hidden = false;
-      }
-    }
-  });
-});
-
-// Allow students to return Puzzle 3 pieces to the palette
-palette3.addEventListener("dragover", function(event) {
-  event.preventDefault();
-});
-
-palette3.addEventListener("drop", function(event) {
-  event.preventDefault();
-
-  const pieceName = event.dataTransfer.getData("text/plain");
-  const piece = document.querySelector(
-  '#puzzle3 .flow-piece[data-piece="' + pieceName + '"]'
-);
-
-  if (piece) {
-    const oldSlot = piece.parentElement;
-
-    if (oldSlot.classList.contains("flow-slot")) {
-      oldSlot.classList.remove("has-piece");
-    }
-
-    if (oldSlot.dataset.answer === "compare") {
-      compareBranches.hidden = true;
-    }
-
-    if (oldSlot.dataset.answer === "more") {
-      moreBranches.hidden = true;
-    }
-
-    palette3.appendChild(piece);
-  }
-});
-
-// PUZZLE 3: CHECK THE ANSWER
-
-const checkPuzzle3 = document.getElementById("checkPuzzle3");
-const hintPuzzle3 = document.getElementById("hintPuzzle3");
-const puzzle3Feedback = document.getElementById("puzzle3Feedback");
-const puzzle3Hint = document.getElementById("puzzle3Hint");
-
-checkPuzzle3.addEventListener("click", function() {
-
-  const allSlots = document.querySelectorAll("#puzzle3 .flow-slot");
-
-  let isCorrect = true;
-
-  allSlots.forEach(function(slot) {
-
-    const placedPiece = slot.querySelector(".flow-piece");
-
-    if (!placedPiece || placedPiece.dataset.piece !== slot.dataset.answer) {
-      isCorrect = false;
-    }
-
-  });
-
-  if (isCorrect) {
-
-    puzzle3Feedback.textContent =
-      "✓ Excellent! You completed Puzzle 3! You built an algorithm that can find the largest number in a list.";
-
-    puzzle3Feedback.className = "feedback correct";
-
-    puzzle3Hint.textContent = "";
-
-    progress3.classList.remove("active");
-    progress3.classList.add("completed");
-
-    progress4.classList.remove("locked");
-    progress4.classList.add("active");
-
-    progress4.querySelector("span").textContent = "4";
-
-    checkPuzzle3.disabled = true;
-    hintPuzzle3.disabled = true;
-
-  } else {
-
-    puzzle3Feedback.textContent =
-      "✗ Not quite! Check the order of your steps and the YES and NO paths. Try again!";
-
-    puzzle3Feedback.className = "feedback incorrect";
-
-  }
-
-});
-
-
-// PUZZLE 3: HINT BUTTON
-
-hintPuzzle3.addEventListener("click", function() {
-
-  puzzle3Hint.textContent =
-    "💡 Hint: Start by saving the first number as the largest. Compare each new number to it. If the new number is larger, update your saved number. Keep checking until there are no more numbers.";
-
-});
-
-
-
-// PUZZLE 4: ALGORITHM DEBUGGER
-
-const debugRounds = [
-  {
-    title: "Round 1: Put It in Order",
-    scenario: "A family wants to buy tickets for Friday night's performance of Moana. The ticket system follows these steps:",
-    steps: [
-      "Receive the family's ticket request.",
-      "Check whether seats are available.",
-      "Ask the family to choose a performance.",
-      "Let the family select their seats.",
-      "Complete the order.",
-      "Send a confirmation."
-    ],
-    question: "What change would help this algorithm work better?",
-    choices: [
-      "Ask the family to choose a performance before checking for available seats.",
-      "Send the confirmation before the family selects seats.",
-      "Remove the step where the family selects seats."
-    ],
-    answer: 0,
-    explanation: "That's right! The system needs to know which performance the family wants before it can check whether seats are available for that show."
-  },
-  {
-    title: "Round 2: Wrong Way!",
-    scenario: "The ticket system checks whether seats are available. But customers are getting the wrong message!",
-    steps: [
-      "Check whether seats are available.",
-      "IF seats are available, display: \"Sorry, this show is sold out!\"",
-      "IF no seats are available, allow the customer to select seats."
-    ],
-    question: "What should be changed in this algorithm?",
-    choices: [
-      "Remove the step that checks for available seats.",
-      "Switch what the system does when seats are available and when they are sold out.",
-      "Send a confirmation before checking for seats."
-    ],
-    answer: 1,
-    explanation: "Correct! If seats are available, customers should be able to select them. If no seats are available, the system should tell them the show is sold out."
-  },
-  {
-    title: "Round 3: Not So Fast!",
-    scenario: "A family chooses a performance and selects two seats. The ticket system then reserves the seats, even though the family hasn't finished placing the order.",
-    steps: [
-      "Choose a performance.",
-      "Select two seats.",
-      "Reserve the selected seats.",
-      "Show the order summary.",
-      "Ask the customer to click \"Place Order\"."
-    ],
-    question: "What is the best way to fix this algorithm?",
-    choices: [
-      "Reserve the seats before the customer chooses them.",
-      "Remove the order summary.",
-      "Move the seat reservation until after the customer clicks \"Place Order\"."
-    ],
-    answer: 2,
-    explanation: "Exactly! The system should wait until the customer places the order before reserving the seats."
-  },
-  {
-    title: "Round 4: What's Missing?",
-    scenario: "A family tries to order tickets for Saturday's performance. The show is sold out, and the ticket system stops the order.",
-    steps: [
-      "Choose a performance.",
-      "Check whether seats are available.",
-      "IF no seats are available, stop the order.",
-      "End the algorithm."
-    ],
-    question: "What important step should be added?",
-    choices: [
-      "Let the family select seats anyway.",
-      "Tell the family that the performance is sold out.",
-      "Send a confirmation for the tickets."
-    ],
-    answer: 1,
-    explanation: "That's right! The system should let the family know why they can't continue with the order. Good algorithms should give users helpful information."
-  }
+// The six puzzles are displayed in this order.
+
+const puzzleIds = [
+  "puzzle1",
+  "puzzle2",
+  "puzzle3",
+  "puzzle4",
+  "puzzle5",
+  "puzzle6"
 ];
 
 
-let debugRoundIndex = 0;
-let debugCorrect = 0;
+// The secret letters are awarded in order.
 
-const debugTitle = document.getElementById("debugTitle");
-const debugScenario = document.getElementById("debugScenario");
-const debugSteps = document.getElementById("debugSteps");
-const debugQuestion = document.getElementById("debugQuestion");
-const debugChoices = document.getElementById("debugChoices");
-const debugFeedback = document.getElementById("debugFeedback");
-const debugRoundLabel = document.getElementById("debugRound");
-const debugScore = document.getElementById("debugScore");
-const checkDebugAnswer = document.getElementById("checkDebugAnswer");
-const nextDebugRound = document.getElementById("nextDebugRound");
-const vaultComplete = document.getElementById("vaultComplete");
+const secretLetters = ["A", "T", "T", "A", "C", "H"];
 
-function showDebugRound() {
-  const round = debugRounds[debugRoundIndex];
 
-  debugTitle.textContent = round.title;
-  debugScenario.textContent = round.scenario;
-  debugQuestion.textContent = round.question;
-  debugRoundLabel.textContent = "ROUND " + (debugRoundIndex + 1) + " OF 4";
-  debugScore.textContent = debugCorrect + " correct";
+// Keep track of which puzzles have been completed.
 
-  debugSteps.innerHTML = "";
-  round.steps.forEach(function(step) {
-    const li = document.createElement("li");
-    li.textContent = step;
-    debugSteps.appendChild(li);
+const completedPuzzles = [false, false, false, false, false, false];
+
+
+// Keep track of the currently selected item for tap-to-move.
+
+let selectedItem = null;
+
+
+// Start by showing only the first puzzle.
+
+function showPuzzle(puzzleNumber) {
+  puzzleIds.forEach((id, index) => {
+    const puzzle = getElement(id);
+
+    if (puzzle) {
+      puzzle.hidden = index !== puzzleNumber - 1;
+    }
   });
 
-  debugChoices.innerHTML = "";
+  // Scroll to the top of the puzzle card when moving forward.
+  const puzzleCard = document.querySelector(".puzzle-card");
 
-  round.choices.forEach(function(choice, index) {
-    const label = document.createElement("label");
-    label.className = "debug-choice";
-
-    const radio = document.createElement("input");
-    radio.type = "radio";
-    radio.name = "debugChoice";
-    radio.value = index;
-
-    const text = document.createElement("span");
-    text.textContent = choice;
-
-    label.appendChild(radio);
-    label.appendChild(text);
-    debugChoices.appendChild(label);
-  });
-
-  debugFeedback.textContent = "";
-  debugFeedback.className = "feedback";
-  checkDebugAnswer.hidden = false;
-  checkDebugAnswer.disabled = false;
-  nextDebugRound.hidden = true;
+  if (puzzleCard) {
+    puzzleCard.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
 }
 
-checkDebugAnswer.addEventListener("click", function() {
-  const selected = document.querySelector(
-    '#debugChoices input[name="debugChoice"]:checked'
-  );
 
-  if (!selected) {
-    debugFeedback.textContent = "Choose an answer before checking.";
-    debugFeedback.className = "feedback incorrect";
+// Award a letter and update the progress tracker.
+
+function completePuzzle(puzzleNumber) {
+  const index = puzzleNumber - 1;
+
+  // Do not award the same letter more than once.
+  if (completedPuzzles[index]) {
     return;
   }
 
-  const round = debugRounds[debugRoundIndex];
-  const isCorrect = Number(selected.value) === round.answer;
+  completedPuzzles[index] = true;
 
-  if (isCorrect) {
-    debugCorrect++;
-    debugFeedback.textContent = "✓ " + round.explanation;
-    debugFeedback.className = "feedback correct";
-  } else {
-    debugFeedback.textContent = "✗ Not quite! " + round.explanation;
-    debugFeedback.className = "feedback incorrect";
+  const progressStep = getElement("progress" + puzzleNumber);
+  const letter = getElement("letter" + puzzleNumber);
+
+  if (progressStep) {
+    progressStep.classList.remove("locked", "active");
+    progressStep.classList.add("completed");
   }
 
-  debugScore.textContent = debugCorrect + " correct";
-
-  document.querySelectorAll(
-    '#debugChoices input[name="debugChoice"]'
-  ).forEach(function(input) {
-    input.disabled = true;
-  });
-
-  checkDebugAnswer.hidden = true;
-
-  if (debugRoundIndex < debugRounds.length - 1) {
-    nextDebugRound.hidden = false;
-  } else {
-    nextDebugRound.textContent = "Finish Challenge →";
-    nextDebugRound.hidden = false;
+  if (letter) {
+    letter.textContent = secretLetters[index];
   }
-});
 
-nextDebugRound.addEventListener("click", function() {
-  debugRoundIndex++;
+  // Reveal the matching letter in the secret word.
+  const secretWord = getElement("secretWord");
 
-  if (debugRoundIndex<debugRounds.length) {
-  nextDebugRound.textContent="Next Round →";
-  showDebugRound();
-  document.getElementById("puzzle4").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-} else {
-    document.querySelector(".debugger-activity").hidden = true;
-    vaultComplete.hidden = false;
+  if (secretWord) {
+    const letters = secretWord.querySelectorAll("span");
 
-    progress4.classList.remove("active");
-    progress4.classList.add("completed");
-    progress4.querySelector("span").textContent = "4";
+    if (letters[index]) {
+      letters[index].textContent = secretLetters[index];
+      letters[index].classList.add("revealed");
+    }
   }
-});
 
-// Show Puzzle 4 after Puzzle 3 is completed
-document.getElementById("checkPuzzle3").addEventListener("click", function() {
-  if (puzzle3Feedback.classList.contains("correct")) {
-    document.getElementById("nextPuzzle4").hidden = false;
+  // Unlock the next progress step.
+  const nextStep = getElement("progress" + (puzzleNumber + 1));
+
+  if (nextStep) {
+    nextStep.classList.remove("locked");
+    nextStep.classList.add("active");
   }
-});
-
-document.getElementById("nextPuzzle4").addEventListener("click", function() {
-  document.getElementById("puzzle3").hidden = true;
-  document.getElementById("puzzle4").hidden = false;
-  showDebugRound();
-  scrollToPuzzle(4);
-});
+}
 
 
-function scrollToPuzzle(puzzleNumber) {
-  document.getElementById("puzzle" + puzzleNumber).scrollIntoView({
-    behavior: "smooth",
-    block: "start"
+// Display feedback messages consistently.
+
+function showFeedback(elementId, message, type) {
+  const element = getElement(elementId);
+
+  if (!element) {
+    return;
+  }
+
+  element.textContent = message;
+  element.classList.remove("success", "error");
+
+  if (type) {
+    element.classList.add(type);
+  }
+}
+
+
+// Remove feedback styling and text.
+
+function clearFeedback(elementId) {
+  const element = getElement(elementId);
+
+  if (element) {
+    element.textContent = "";
+    element.classList.remove("success", "error");
+  }
+}
+
+
+/* ---------------------------------------------------------
+   2. POINTER-BASED MOVEMENT AND TAP-TO-MOVE
+
+   These functions allow students to move items with:
+   - A mouse
+   - A Chromebook trackpad
+   - A touchscreen
+
+   Pointer events work across these types of devices.
+
+   Students can also tap an item and then tap its destination.
+   --------------------------------------------------------- */
+
+
+// Make an item visibly selected.
+
+function selectItem(item) {
+  // Remove the selected appearance from the previous item.
+  if (selectedItem) {
+    selectedItem.classList.remove("selected");
+  }
+
+  selectedItem = item;
+
+  if (selectedItem) {
+    selectedItem.classList.add("selected");
+  }
+}
+
+
+// Clear the current selection.
+
+function clearSelection() {
+  if (selectedItem) {
+    selectedItem.classList.remove("selected");
+  }
+
+  selectedItem = null;
+}
+
+
+// Set up pointer dragging for the ordered list in Puzzle 1.
+
+function setupSequenceMovement() {
+  const list = getElement("stepList");
+
+  if (!list) {
+    return;
+  }
+
+  let draggedItem = null;
+  let startY = 0;
+  let pointerMoved = false;
+
+  list.querySelectorAll("li").forEach(item => {
+
+    // Prevent the browser's older HTML drag-and-drop behavior.
+    item.draggable = false;
+
+    item.addEventListener("pointerdown", event => {
+      draggedItem = item;
+      startY = event.clientY;
+      pointerMoved = false;
+
+      item.setPointerCapture(event.pointerId);
+      item.classList.add("dragging");
+    });
+
+    item.addEventListener("pointermove", event => {
+      if (!draggedItem) {
+        return;
+      }
+
+      if (Math.abs(event.clientY - startY) > 5) {
+        pointerMoved = true;
+      }
+
+      if (!pointerMoved) {
+        return;
+      }
+
+      // Find the list item directly under the pointer.
+      const otherItem = document.elementFromPoint(
+        event.clientX,
+        event.clientY
+      )?.closest("#stepList li");
+
+      if (!otherItem || otherItem === draggedItem) {
+        return;
+      }
+
+      const box = otherItem.getBoundingClientRect();
+      const insertAfter = event.clientY > box.top + box.height / 2;
+
+      if (insertAfter) {
+        otherItem.after(draggedItem);
+      } else {
+        otherItem.before(draggedItem);
+      }
+    });
+
+    item.addEventListener("pointerup", () => {
+      if (!draggedItem) {
+        return;
+      }
+
+      draggedItem.classList.remove("dragging");
+
+      // If the student only tapped, select the item.
+      if (!pointerMoved) {
+        selectItem(draggedItem);
+      } else {
+        clearSelection();
+      }
+
+      draggedItem = null;
+      pointerMoved = false;
+    });
+
+    item.addEventListener("pointercancel", () => {
+      if (draggedItem) {
+        draggedItem.classList.remove("dragging");
+      }
+
+      draggedItem = null;
+      pointerMoved = false;
+    });
   });
 }
+
+
+// Allow students to tap two list items to swap their positions.
+
+function setupSequenceTapMovement() {
+  const list = getElement("stepList");
+
+  if (!list) {
+    return;
+  }
+
+  list.addEventListener("click", event => {
+    const item = event.target.closest("li");
+
+    if (!item) {
+      return;
+    }
+
+    if (!selectedItem) {
+      selectItem(item);
+      return;
+    }
+
+    if (selectedItem === item) {
+      clearSelection();
+      return;
+    }
+
+    // Swap the positions of the two selected list items.
+    const first = selectedItem;
+    const second = item;
+
+    const firstNext = first.nextSibling;
+    const secondNext = second.nextSibling;
+
+    if (firstNext === second) {
+      list.insertBefore(second, first);
+    } else if (secondNext === first) {
+      list.insertBefore(first, second);
+    } else {
+      const placeholder = document.createElement("li");
+
+      list.insertBefore(placeholder, first);
+      list.insertBefore(first, second);
+      list.insertBefore(second, placeholder);
+
+      placeholder.remove();
+    }
+
+    clearSelection();
+  });
+}
+
+
+/* ---------------------------------------------------------
+   3. PUZZLE 1: LOG IN AND GET READY
+
+   Students arrange the five steps in the correct order.
+
+   The expected order is:
+   1. Press the power button.
+   2. Connect the charger if the Chromebook will not turn on.
+   3. Enter username and password.
+   4. Check the login information if login does not work.
+   5. Reach the Chromebook desktop.
+
+   This is a simplified sequence activity. The two
+   troubleshooting steps describe what to do IF a problem
+   happens; they are not steps every student must perform.
+   --------------------------------------------------------- */
+
+
+function setupPuzzle1() {
+  const checkButton = getElement("checkAnswer");
+  const hintButton = getElement("hintButton");
+  const nextButton = getElement("nextPuzzle");
+
+  setupSequenceMovement();
+  setupSequenceTapMovement();
+
+  if (checkButton) {
+    checkButton.addEventListener("click", () => {
+      const items = document.querySelectorAll("#stepList li");
+
+      const currentOrder = Array.from(items).map(item =>
+        Number(item.dataset.step)
+      );
+
+      const correctOrder = [1, 2, 3, 4, 5];
+
+      const isCorrect = currentOrder.every(
+        (step, index) => step === correctOrder[index]
+      );
+
+      if (isCorrect) {
+        showFeedback(
+          "feedback",
+          "Correct! You put the login steps in the right order. Remember, the charger and login checks are only needed if a problem happens.",
+          "success"
+        );
+
+        completePuzzle(1);
+        nextButton.hidden = false;
+
+        // Highlight each correctly placed step.
+        items.forEach(item => item.classList.add("correct-position"));
+
+        checkButton.disabled = true;
+      } else {
+        showFeedback(
+          "feedback",
+          "Not quite. Think about what must happen before you can enter your username and password. Try again!",
+          "error"
+        );
+      }
+    });
+  }
+
+  if (hintButton) {
+    hintButton.addEventListener("click", () => {
+      getElement("hintMessage").textContent =
+        "Hint: You must turn on the Chromebook before you can sign in. Reaching the desktop is the last step.";
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener("click", () => showPuzzle(2));
+  }
+}
+
+
+/* ---------------------------------------------------------
+   4. PUZZLE 2: BUILD A TROUBLESHOOTING FLOWCHART
+
+   Students place five pieces into five matching slots.
+
+   START → Refresh webpage → Did the page load?
+   YES → END
+   NO → Check internet connection
+
+   The activity represents a simple troubleshooting plan.
+   --------------------------------------------------------- */
+
+
+function setupFlowchartMovement() {
+  const pieces = document.querySelectorAll(".flow-piece");
+  const slots = document.querySelectorAll(".flow-slot");
+
+  let draggedPiece = null;
+  let startX = 0;
+  let startY = 0;
+  let pointerMoved = false;
+
+  // Make every flowchart piece selectable and draggable.
+  pieces.forEach(piece => {
+    piece.draggable = false;
+
+    piece.addEventListener("pointerdown", event => {
+      draggedPiece = piece;
+      startX = event.clientX;
+      startY = event.clientY;
+      pointerMoved = false;
+
+      piece.setPointerCapture(event.pointerId);
+      piece.classList.add("dragging");
+    });
+
+    piece.addEventListener("pointermove", event => {
+      if (!draggedPiece) {
+        return;
+      }
+
+      if (
+        Math.abs(event.clientX - startX) > 6 ||
+        Math.abs(event.clientY - startY) > 6
+      ) {
+        pointerMoved = true;
+      }
+    });
+
+    piece.addEventListener("pointerup", event => {
+      if (!draggedPiece) {
+        return;
+      }
+
+      piece.classList.remove("dragging");
+
+      if (pointerMoved) {
+        const target = document.elementFromPoint(
+          event.clientX,
+          event.clientY
+        );
+
+        const slot = target?.closest(".flow-slot");
+
+        if (slot) {
+          placeFlowPiece(piece, slot);
+        }
+      } else {
+        selectItem(piece);
+      }
+
+      draggedPiece = null;
+      pointerMoved = false;
+    });
+
+    piece.addEventListener("pointercancel", () => {
+      piece.classList.remove("dragging");
+      draggedPiece = null;
+      pointerMoved = false;
+    });
+  });
+
+  // Tapping a piece and then tapping a slot also moves it.
+  slots.forEach(slot => {
+    slot.addEventListener("click", () => {
+      if (selectedItem && selectedItem.classList.contains("flow-piece")) {
+        placeFlowPiece(selectedItem, slot);
+        clearSelection();
+      }
+    });
+  });
+}
+
+
+// Move a flowchart piece into a slot.
+// If another piece is already there, return it to the palette.
+
+function placeFlowPiece(piece, slot) {
+  const oldPiece = slot.querySelector(".flow-piece");
+
+  if (oldPiece && oldPiece !== piece) {
+    getElement("decisionBranches")
+      .previousElementSibling
+      ?.querySelector(".draggable-pieces")
+      ?.appendChild(oldPiece);
+
+    // A more direct fallback: find the palette and return the piece.
+    const palette = document.querySelector(".draggable-pieces");
+
+    if (palette) {
+      palette.appendChild(oldPiece);
+    }
+  }
+
+  slot.textContent = "";
+  slot.appendChild(piece);
+
+  // Show the YES and NO branches when the decision is placed.
+  if (piece.dataset.piece === "loaded") {
+    getElement("decisionBranches").hidden = false;
+  }
+
+  // If the decision is removed from its slot, hide the branches.
+  const decisionSlot = document.querySelector(
+    '.flow-slot[data-answer="loaded"]'
+  );
+
+  if (
+    decisionSlot &&
+    !decisionSlot.querySelector('.flow-piece[data-piece="loaded"]')
+  ) {
+    getElement("decisionBranches").hidden = true;
+  }
+
+  clearFeedback("flowFeedback");
+}
+
+
+// Check whether every flowchart piece is in the correct slot.
+
+function setupPuzzle2() {
+  setupFlowchartMovement();
+
+  const checkButton = getElement("checkFlowchart");
+  const hintButton = getElement("hintFlowchart");
+  const nextButton = getElement("nextPuzzle3");
+
+  if (checkButton) {
+    checkButton.addEventListener("click", () => {
+      const slots = document.querySelectorAll(".flow-slot[data-answer]");
+      let correctCount = 0;
+
+      slots.forEach(slot => {
+        const piece = slot.querySelector(".flow-piece");
+
+        if (piece && piece.dataset.piece === slot.dataset.answer) {
+          correctCount++;
+        }
+      });
+
+      if (correctCount === 5) {
+        showFeedback(
+          "flowFeedback",
+          "Great work! Your flowchart shows the steps and the YES/NO decision paths.",
+          "success"
+        );
+
+        completePuzzle(2);
+        nextButton.hidden = false;
+        checkButton.disabled = true;
+      } else {
+        showFeedback(
+          "flowFeedback",
+          "Not quite yet. Check the START, process, decision, and END pieces. Make sure each one is in the matching spot.",
+          "error"
+        );
+      }
+    });
+  }
+
+  if (hintButton) {
+    hintButton.addEventListener("click", () => {
+      getElement("flowHint").textContent =
+        "Hint: START comes first. Refresh the webpage, then ask whether the page loaded. YES leads to END. NO leads to checking the internet connection.";
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener("click", () => showPuzzle(3));
+  }
+}
+
+
+/* ---------------------------------------------------------
+   5. PUZZLE 3: WHERE DID IT GO?
+
+   Correct answers:
+   Question 1: Google Drive (choice 1)
+   Question 2: Downloads (choice 0)
+   Question 3: Files app (choice 1)
+   --------------------------------------------------------- */
+
+
+function setupPuzzle3() {
+  const questionArea = getElement("locationQuestions");
+  const checkButton = getElement("checkLocations");
+  const nextButton = getElement("nextPuzzle4");
+
+  // Store the student's selected answers.
+  const selectedAnswers = [null, null, null];
+
+  const correctAnswers = [1, 0, 1];
+
+  if (questionArea) {
+    questionArea.querySelectorAll(".location-question").forEach(question => {
+      const questionNumber = Number(question.dataset.question);
+
+      question.querySelectorAll(".location-choice").forEach(button => {
+        button.addEventListener("click", () => {
+          if (completedPuzzles[2]) {
+            return;
+          }
+
+          // Save the selected answer.
+          selectedAnswers[questionNumber] = Number(button.dataset.choice);
+
+          // Show which answer is selected.
+          question.querySelectorAll(".location-choice").forEach(choice => {
+            choice.classList.remove("selected");
+          });
+
+          button.classList.add("selected");
+
+          // Clear old feedback for this question.
+          const feedback = question.querySelector(".question-feedback");
+
+          if (feedback) {
+            feedback.textContent = "";
+            feedback.classList.remove("success", "error");
+          }
+        });
+      });
+    });
+  }
+
+  if (checkButton) {
+    checkButton.addEventListener("click", () => {
+      let correctCount = 0;
+
+      questionArea.querySelectorAll(".location-question").forEach(question => {
+        const questionNumber = Number(question.dataset.question);
+        const feedback = question.querySelector(".question-feedback");
+        const isCorrect =
+          selectedAnswers[questionNumber] === correctAnswers[questionNumber];
+
+        if (isCorrect) {
+          correctCount++;
+
+          feedback.textContent = "Correct!";
+          feedback.classList.add("success");
+          feedback.classList.remove("error");
+        } else {
+          feedback.textContent = "Try again.";
+          feedback.classList.add("error");
+          feedback.classList.remove("success");
+        }
+      });
+
+      if (correctCount === 3) {
+        showFeedback(
+          "locationFeedback",
+          "All three are correct! Google Drive stores your online files, Downloads holds downloaded files, and the Files app lets you browse both.",
+          "success"
+        );
+
+        completePuzzle(3);
+        nextButton.hidden = false;
+        checkButton.disabled = true;
+      } else {
+        showFeedback(
+          "locationFeedback",
+          correctCount + " out of 3 correct. Review the explanations above and try again.",
+          "error"
+        );
+      }
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener("click", () => showPuzzle(4));
+  }
+}
+
+
+/* ---------------------------------------------------------
+   6. PUZZLE 4: NAME THAT FILE!
+
+   The best filename is choice 2:
+   Science Ecosystems Research
+   --------------------------------------------------------- */
+
+
+function setupPuzzle4() {
+  const choicesArea = getElement("filenameChoices");
+  const feedback = getElement("filenameFeedback");
+  const nextButton = getElement("nextPuzzle5");
+
+  let selectedChoice = null;
+
+  if (choicesArea) {
+    choicesArea.querySelectorAll(".filename-choice").forEach(button => {
+      button.addEventListener("click", () => {
+        if (completedPuzzles[3]) {
+          return;
+        }
+
+        selectedChoice = Number(button.dataset.choice);
+
+        choicesArea.querySelectorAll(".filename-choice").forEach(choice => {
+          choice.classList.remove("selected");
+        });
+
+        button.classList.add("selected");
+
+        clearFeedback("filenameFeedback");
+      });
+    });
+  }
+
+  if (choicesArea) {
+    choicesArea.addEventListener("click", event => {
+      const button = event.target.closest(".filename-choice");
+
+      if (!button || selectedChoice === null) {
+        return;
+      }
+
+      // Check the answer after a student selects an option.
+      if (selectedChoice === 2) {
+        button.classList.add("correct");
+
+        showFeedback(
+          "filenameFeedback",
+          "Exactly! Science Ecosystems Research tells you what the document is about. A useful filename makes it easier to recognize and find later.",
+          "success"
+        );
+
+        completePuzzle(4);
+        nextButton.hidden = false;
+      } else {
+        showFeedback(
+          "filenameFeedback",
+          "That name is still too general. Choose a filename that tells you the subject and topic.",
+          "error"
+        );
+      }
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener("click", () => showPuzzle(5));
+  }
+}
+
+
+/* ---------------------------------------------------------
+   7. PUZZLE 5: SEARCH AND FIND
+
+   Students search the simulated file list.
+
+   They need to find and select:
+   Science Ecosystems Research
+
+   The search works with partial keywords, such as:
+   Science, Ecosystems, or Research.
+   --------------------------------------------------------- */
+
+
+function setupPuzzle5() {
+  const searchInput = getElement("driveSearch");
+  const searchButton = getElement("searchDrive");
+  const fileList = getElement("driveFileList");
+  const status = getElement("searchStatus");
+  const nextButton = getElement("nextPuzzle6");
+
+  const targetFile = "Science Ecosystems Research";
+
+  function searchFiles() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    let visibleCount = 0;
+
+    if (searchTerm === "") {
+      status.textContent = "Type a word from the filename to search.";
+      return;
+    }
+
+    fileList.querySelectorAll(".drive-file").forEach(file => {
+      const filename = file.dataset.filename.toLowerCase();
+      const matches = filename.includes(searchTerm);
+
+      file.hidden = !matches;
+
+      if (matches) {
+        visibleCount++;
+      }
+    });
+
+    if (visibleCount === 0) {
+      status.textContent = "No matching files. Try another search word.";
+    } else {
+      status.textContent =
+        visibleCount + (visibleCount === 1 ? " file found." : " files found.") +
+        " Select the correct assignment.";
+    }
+
+    clearFeedback("searchFeedback");
+  }
+
+  if (searchButton) {
+    searchButton.addEventListener("click", searchFiles);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        searchFiles();
+      }
+    });
+  }
+
+  // Students must click the correct result, not just type a word.
+  if (fileList) {
+    fileList.querySelectorAll(".drive-file").forEach(file => {
+      file.addEventListener("click", () => {
+        if (completedPuzzles[4] || file.hidden) {
+          return;
+        }
+
+        if (file.dataset.filename === targetFile) {
+          showFeedback(
+            "searchFeedback",
+            "You found it! A descriptive filename makes searching much easier.",
+            "success"
+          );
+
+          file.classList.add("selected");
+          completePuzzle(5);
+          nextButton.hidden = false;
+        } else {
+          showFeedback(
+            "searchFeedback",
+            "That's not the assignment. Look for Science Ecosystems Research.",
+            "error"
+          );
+        }
+      });
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener("click", () => showPuzzle(6));
+  }
+}
+
+
+/* ---------------------------------------------------------
+   8. PUZZLE 6: ATTACH AND TURN IN
+
+   Students practice attaching the correct file to a
+   simulated Classroom assignment.
+
+   Correct file:
+   Science Ecosystems Research
+
+   The Turn In button becomes available only after the
+   correct file is attached.
+   --------------------------------------------------------- */
+
+
+function setupPuzzle6() {
+  const addButton = getElement("addFileButton");
+  const picker = getElement("filePicker");
+  const closePicker = getElement("closeFilePicker");
+  const insertButton = getElement("insertFile");
+  const turnInButton = getElement("turnInButton");
+
+  const noAttachment = getElement("noAttachment");
+  const attachedFile = getElement("attachedFile");
+  const attachedFileName = getElement("attachedFileName");
+  const removeButton = getElement("removeAttachment");
+
+  const feedback = getElement("submissionFeedback");
+  const missionComplete = getElement("missionComplete");
+
+  let selectedFile = null;
+  let attachedFileNameValue = null;
+
+  const correctFile = "Science Ecosystems Research";
+
+
+  // Open the simulated file picker.
+  if (addButton) {
+    addButton.addEventListener("click", () => {
+      picker.hidden = false;
+      clearFeedback("submissionFeedback");
+    });
+  }
+
+
+  // Close the file picker.
+  if (closePicker) {
+    closePicker.addEventListener("click", () => {
+      picker.hidden = true;
+      selectedFile = null;
+
+      picker.querySelectorAll(".picker-file").forEach(file => {
+        file.classList.remove("selected");
+      });
+
+      insertButton.disabled = true;
+    });
+  }
+
+
+  // Select a file from the simulated Google Drive list.
+  picker.querySelectorAll(".picker-file").forEach(button => {
+    button.addEventListener("click", () => {
+      selectedFile = button.dataset.file;
+
+      picker.querySelectorAll(".picker-file").forEach(file => {
+        file.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+      insertButton.disabled = false;
+    });
+  });
+
+
+  // Insert the selected file into the assignment.
+  if (insertButton) {
+    insertButton.addEventListener("click", () => {
+      if (!selectedFile) {
+        return;
+      }
+
+      attachedFileNameValue = selectedFile;
+
+      attachedFileName.textContent = selectedFile;
+      attachedFile.hidden = false;
+      noAttachment.hidden = true;
+
+      picker.hidden = true;
+      turnInButton.disabled = false;
+
+      // Clear the selected file in the picker.
+      selectedFile = null;
+
+      picker.querySelectorAll(".picker-file").forEach(file => {
+        file.classList.remove("selected");
+      });
+
+      insertButton.disabled = true;
+
+      if (attachedFileNameValue === correctFile) {
+        showFeedback(
+          "submissionFeedback",
+          "Correct file attached! You're ready to turn in your assignment.",
+          "success"
+        );
+      } else {
+        showFeedback(
+          "submissionFeedback",
+          "A file is attached, but double-check that it is the correct assignment before turning it in.",
+          "error"
+        );
+      }
+    });
+  }
+
+
+  // Remove an attached file so the student can choose another.
+  if (removeButton) {
+    removeButton.addEventListener("click", () => {
+      attachedFileNameValue = null;
+
+      attachedFile.hidden = true;
+      noAttachment.hidden = false;
+      turnInButton.disabled = true;
+
+      clearFeedback("submissionFeedback");
+    });
+  }
+
+
+  // Turn in the assignment only when the correct file is attached.
+  if (turnInButton) {
+    turnInButton.addEventListener("click", () => {
+      if (attachedFileNameValue !== correctFile) {
+        showFeedback(
+          "submissionFeedback",
+          "That isn't the correct assignment. Remove the file and attach Science Ecosystems Research.",
+          "error"
+        );
+
+        return;
+      }
+
+      showFeedback(
+        "submissionFeedback",
+        "Assignment turned in successfully!",
+        "success"
+      );
+
+      completePuzzle(6);
+
+      // Reveal the final mission-complete message.
+      missionComplete.hidden = false;
+
+      // Prevent additional changes after submission.
+      turnInButton.disabled = true;
+      addButton.disabled = true;
+      removeButton.disabled = true;
+
+      // Move the student down to the completion message.
+      missionComplete.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    });
+  }
+}
+
+
+/* ---------------------------------------------------------
+   9. START THE ACTIVITY
+
+   Wait until the HTML is ready, then connect all six puzzles.
+   --------------------------------------------------------- */
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupPuzzle1();
+  setupPuzzle2();
+  setupPuzzle3();
+  setupPuzzle4();
+  setupPuzzle5();
+  setupPuzzle6();
+
+  showPuzzle(1);
+});
