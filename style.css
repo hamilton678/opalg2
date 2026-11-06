@@ -143,26 +143,28 @@ main {
 
 /* =========================================================
    5. PROGRESS TRACKER
+      Six puzzle tiles that change as students complete missions.
    ========================================================= */
 
 .progress-container {
   margin: 0 auto 24px;
-  padding: 18px 22px;
+  padding: 20px;
   background: var(--white);
   border-radius: var(--card-radius);
   box-shadow: var(--shadow);
 }
 
 .progress-heading {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   text-align: center;
 }
 
 .progress-heading h2 {
   margin: 0;
   font-family: 'Outfit', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--dark);
 }
 
 .progress-tracker {
@@ -171,44 +173,101 @@ main {
   gap: 10px;
 }
 
+/* Each puzzle is represented by one tile. */
 .progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   min-width: 0;
-  padding: 10px 4px;
-  background: var(--light-gray);
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  text-align: center;
+  min-height: 92px;
+  padding: 8px 3px;
+
+  background: #E5CAFC;
+  border: 4px solid #DBCD0F;
+  border-radius: 13px;
+
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.progress-step .step-number {
-  display: block;
-  margin-bottom: 3px;
-  color: var(--gray);
-  font-size: 0.75rem;
-  font-weight: 800;
+/* Reserve identical space above every number or letter.
+   This keeps all six characters aligned. */
+.progress-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 25px;
 }
 
+/* Active puzzle indicator */
+.active-dot {
+  display: block;
+  width: 13px;
+  height: 13px;
+  background: #307DD9;
+  border-radius: 50%;
+}
+
+/* Large, bold puzzle numbers and revealed letters */
 .progress-step .step-letter {
-  display: block;
-  color: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+
+  color: #FFFFFF;
   font-family: 'Fredoka', sans-serif;
-  font-size: 1.7rem;
-  font-weight: 600;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
-.progress-step.completed {
-  background: var(--light-yellow);
-  border-color: var(--yellow);
-}
-
-.progress-step.completed .step-letter {
-  color: var(--dark);
-}
-
+/* ACTIVE PUZZLE
+   Yellow background and lavender border. */
 .progress-step.active {
-  border: 3px solid var(--green);
+  background: #DBCD0F;
+  border: 4px solid #E5CAFC;
 }
+
+/* COMPLETED PUZZLE
+   Blue background and yellow border. */
+.progress-step.completed {
+  background: #307DD9;
+  border: 4px solid #DBCD0F;
+}
+
+/* Green checkmark for completed puzzles */
+.progress-step.completed .progress-indicator::before {
+  content: "✓";
+  color: #0FAA69;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 700px) {
+  .progress-tracker {
+    gap: 5px;
+  }
+
+  .progress-step {
+    min-height: 78px;
+    border-width: 3px;
+  }
+
+  .progress-step.active,
+  .progress-step.completed {
+    border-width: 3px;
+  }
+
+  .progress-step .step-letter {
+    font-size: 1.6rem;
+  }
+}
+
 
 
 /* =========================================================
